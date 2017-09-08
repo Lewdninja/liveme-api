@@ -19,6 +19,10 @@
     "api"
   ],
   "author": "thecoder1975@gmail.com",
+  "contributors": [
+    "thecoder75",
+    "polydragon"
+  ],
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/thecoder75/liveme-api/issues"
