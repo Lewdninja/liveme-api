@@ -10,91 +10,178 @@
 
 */
 
-const	eventEmitter = new(require('events').EventEmitter)(), superagent = require('superagent'), nocache = require('superagent-no-cache')
+const superagent = require('superagent'), nocache = require('superagent-no-cache')
+
+/* 
+	Constants
+*/
+const LM_GETUSERINFO = 'http://live.ksmobile.net/user/getinfo',
+	LM_GETVIDEOINFO = 'http://live.ksmobile.net/live/queryinfo',
+	LM_GETREPLAYVIDEOS = 'http://live.ksmobile.net/live/getreplayvideos',
+	LM_KEYWORDSEARCH = 'http://live.ksmobile.net/search/searchkeyword';
+
+/*
+	Local Functions
+*/
+
+function httpGet(url, query) {
+	return new Promise((resolve, reject) => {
+		superagent.get(url).query(query).use(nocache).end((err, res) => {
+			if (err) {
+				return reject(err);
+			} else {
+				return promise(res.body.data);
+			}
+		});
+	});
+}
+
+/*
+	Exported Functions
+*/
 
 module.exports = {
-	events: eventEmitter,
+	/*
+		uid: number
+		Returns: Promise of a User object
+	*/
+	getUserInfo: function (uid) {
+		return new Promise((resolve, reject) => {
+			if (typeof uid == 'undefined' || uid == null || uid <= 0) {
+				return reject('Invalid user ID');
+			}
 
-	getUserInfo: function(uid) {
-		superagent.get('http://live.ksmobile.net/user/getinfo')
-			.query({
-				userid: uid
-			})
-			.use(nocache)
-			.end((err, res) => {
-				if (err) { 
-					eventEmitter.emit('error', err); 
-				} else {
-					eventEmitter.emit('data', res.body.data);
-				}
+			return resolve();
+		}).then(() => {
+			return httpGet(LM_GETUSERINFO, { userid: uid })
+		})
+			.then(data => {
+				return data; // TODO: return an actual user object
 			});
 	},
 
-	getVideoInfo: function(vid) {
-		superagent.get('http://live.ksmobile.net/live/queryinfo')
-			.query({
-				userid: 0,
-				videoid: vid
-			})
-			.use(nocache)
-			.end((err, res) => {
-				if (err) { 
-					eventEmitter.emit('error', err); 
-				} else {
-					eventEmitter.emit('data', res.body.data);
-				}
+	/*
+		Synchronous version of `getUserInfo`
+		uid: number
+		Returns: User object, null on failure
+	*/
+	getUserInfoSync: async function (uid) {
+		return await this.getUserInfo(uid)
+			.catch(err => {
+				return null;
 			});
+	},
+
+	/*
+		vid: number
+		Returns: Promise of a Video object
+	*/
+	getVideoInfo: function (vid) {
+		return httpGet(LM_GETVIDEOINFO, { userid: 0, videoid: vid })
+			.then(data => {
+				return data; // TODO: return an actual video object
+			})
+			.catch(err => {
+				return null;
+			});
+	},
+
+	/*
+		Synchronous version of `getVideoInfo`
+		vid: number
+		Returns: Video object, null on failure
+	*/
+	getVideoInfoSync: async function (vid) {
+		return await this.getVideoInfo(vid);
+	},
+
+	/*
+		uid: number
+		page: number (default 1)
+		count: number (default 10)
+		Returns: Promise of an array of Video objects
+	*/
+	getUserReplays: function (uid, page, count) {
+		return new Promise((resolve, reject) => {
+			if (typeof page == 'undefined' || page == null) { page = 1; }
+			if (typeof count == 'undefined' || count == null) { count = 10; }
+
+			if (page <= 0) {
+				return reject('Page must be greater than 0');
+			}
+
+			if (count <= 0) {
+				return reject('Count must be greater than 0');
+			}
+
+			return resolve();
+		}).then(() => {
+			return httpGet(LM_GETREPLAYVIDEOS, { userid: uid, page_size: page, page_index: count });
+		}).then(data => {
+			return data; // TODO: return array of Video objects
+		});
+	},
+
+	/*
+		Synchronous version of `getUserReplays`
+		uid: number
+		page: number (default 1)
+		count: number (default 10)
+		Returns: An array of Video objects, null on failure
+	*/
+	getUserReplaysSync: function (uid, page, count) {
+		return this.getUserReplays(uid, page, count)
+			.catch(err => {
+				return null;
+			});
+	},
+
+	/*
+		query: string
+		page: number (default 1)
+		count: number (default 10)
+		type: number [1|2] (default 1)
+		country: string [2 letter country code] (default US)
+		Returns: Promise of an array of Video objects
+	*/
+	performSearch: function (query, page, count, type, country) {
+		return new Promise((resolve, reject) => {
+			if (typeof page == 'undefined' || page == null) { page = 1; }
+			if (typeof count == 'undefined' || count == null) { count = 10; }
+			if (typeof type == 'undefined' || type == null) { type = 0; }
+			if (typeof country == 'undefined' || country == null) { country = 'US'; }
+
+			if (page <= 0) {
+				return reject('Page must be greater than 0');
+			}
+
+			if (count <= 0) {
+				return reject('Count must be greater than 0');
+			}
+
+			if (type < 1 || type > 2) {
+				return reject('Count must be 1 or 2');
+			}
+
+			// TODO: Maybe check country code? Doubt it's needed.
+			
+			return resolve();
+		}).then(() => {
+			return httpGet(LM_KEYWORDSEARCH, { userid: uid, page_index: page, page_size: count, type: type, countryCode: country });
+		}).then(data => {
+			if (type == 1) { // list of users
+				return data; // TODO: return array of User objects
+			} else if (type == 2) { // Video #tag search.
+				return data; // TODO: return array of Video objects
+			}
+		});
+
+	},
+
+	getLive: function () {
+
 	}
 
-	getUserReplays: function(uid, page, count) {
-		if (typeof page == 'undefined') { page = 1; }
-		if (typeof count == 'undefined') { count = 10; }
-
-		superagent.get('http://live.ksmobile.net/live/getreplayvideos')
-			.query({
-				userid: uid,
-				page_size: page,
-				page_index: count
-			})
-			.use(nocache)
-			.end((err, res) => {
-				if (err) { 
-					eventEmitter.emit('error', err); 
-				} else {
-					eventEmitter.emit('data', res.body.data);
-				}
-			});
-	},
-	
-	performSearch: function(query, page, count, type, country) {
-		if (typeof page == 'undefined') { page = 1; }
-		if (typeof count == 'undefined') { count = 10; }
-		if (typeof type == 'undefined') { type = 0; }
-		if (typeof country == 'undefined') { country = 'US'; }
-
-		superagent.get('http://live.ksmobile.net/live/getreplayvideos')
-			.query({
-				userid: uid,
-				page_size: page,
-				page_index: count,
-				type: type,
-				countryCode: country
-			})
-			.use(nocache)
-			.end((err, res) => {
-				if (err) { 
-					eventEmitter.emit('error', err); 
-				} else {
-					eventEmitter.emit('data', res.body.data);
-				}
-			});
-
-	},
-	
-	getLive: function() {
-
-	}
-	
 };
 
 
