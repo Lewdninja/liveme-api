@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "publish": "npm publish"    
+    "publish": "npm publish"
   },
   "engines": {
     "node": ">=5.0.0"
@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/thecoder75/liveme-api/issues"
   },
-  "homepage": "https://github.com/thecoder75/liveme-api#readme"
+  "homepage": "https://github.com/thecoder75/liveme-api#readme",
+  "dependencies": {
+    "superagent": "^3.6.0"
+  }
 }
