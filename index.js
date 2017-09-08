@@ -77,13 +77,18 @@ module.exports = {
 		Returns: Promise of a Video object
 	*/
 	getVideoInfo: function (vid) {
-		return httpGet(LM_GETVIDEOINFO, { userid: 0, videoid: vid })
-			.then(data => {
-				return data; // TODO: return an actual video object
-			})
-			.catch(err => {
-				return null;
-			});
+		return new Promise((resolve, reject) => {
+			if (typeof vid == 'undefined' || vid == null || vid <= 0) {
+				return reject('Invalid video ID');
+			}
+
+			return resolve();
+		}).then(() => {
+			return httpGet(LM_GETVIDEOINFO, { userid: 0, videoid: vid })
+		})
+		.then(data => {
+			return data; // TODO: return an actual video object
+		});
 	},
 
 	/*
@@ -92,7 +97,10 @@ module.exports = {
 		Returns: Video object, null on failure
 	*/
 	getVideoInfoSync: async function (vid) {
-		return await this.getVideoInfo(vid);
+		return await this.getVideoInfo(vid)
+			.catch(err => {
+				return null;
+			});
 	},
 
 	/*
@@ -160,11 +168,11 @@ module.exports = {
 			}
 
 			if (type < 1 || type > 2) {
-				return reject('Count must be 1 or 2');
+				return reject('Type must be 1 or 2');
 			}
 
 			// TODO: Maybe check country code? Doubt it's needed.
-			
+
 			return resolve();
 		}).then(() => {
 			return httpGet(LM_KEYWORDSEARCH, { userid: uid, page_index: page, page_size: count, type: type, countryCode: country });
