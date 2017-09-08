@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/thecoder75/liveme-api#readme",
   "dependencies": {
-    "superagent": "^3.6.0"
+    "superagent": "^3.6.0",
+    "superagent-no-cache": "^0.1.1"
   }
 }
