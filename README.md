@@ -1,2 +1,3 @@
-# liveme-api
-LiveMe API for Node
+# LiveMe API for Node
+
+### This is currently in early planning and drafting stage right now.
