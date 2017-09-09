@@ -6,7 +6,7 @@
 [![npm](https://img.shields.io/npm/v/liveme-api.svg)](https://www.npmjs.com/package/liveme-api)
 [![npm](https://img.shields.io/npm/dt/liveme-api.svg)](https://www.npmjs.com/package/liveme-api)
 
-**This module is under ehavy development AND IS NONFUNCTIONAL!!!**
+**This module is under heavy development AND IS NONFUNCTIONAL!!!**
 
 ## Installation
 `npm install liveme-api`
