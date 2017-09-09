@@ -10,7 +10,7 @@
 
 */
 
-const superagent = require('superagent'), nocache = require('superagent-no-cache')
+const axios = require('axios');
 
 /* 
 	Constants
@@ -27,12 +27,12 @@ const LM_GETUSERINFO = 'http://live.ksmobile.net/user/getinfo',
 
 function httpGet(url, query) {
 	return new Promise((resolve, reject) => {
-		superagent.get(url).query(query).use(nocache).end((err, res) => {
-			if (err) {
-				return reject(err);
-			} else {
-				return promise(res.body.data);
-			}
+		axios.get(url, {
+			params: { query }
+		}).then(function(resp) {
+			return promises(JSON.parse(resp));
+		}).catch(function(err){
+			return rject(err);
 		});
 	});
 }
@@ -42,6 +42,7 @@ function httpGet(url, query) {
 */
 
 module.exports = {
+
 	/*
 		uid: number
 		Returns: Promise of a User object
@@ -56,8 +57,8 @@ module.exports = {
 		}).then(() => {
 			return httpGet(LM_GETUSERINFO, { userid: uid })
 		})
-			.then(data => {
-				return data.user_info; 
+			.then(response => {
+				return response.data.user_info; 
 			});
 	},
 
@@ -87,8 +88,8 @@ module.exports = {
 		}).then(() => {
 			return httpGet(LM_GETVIDEOINFO, { userid: 0, videoid: vid })
 		})
-		.then(data => {
-			return data; 	// Returns video_info & user_info objects for the video
+		.then(response => {
+			return response.data; 	// Returns video_info & user_info objects for the video
 		});
 	},
 
@@ -126,8 +127,8 @@ module.exports = {
 			return resolve();
 		}).then(() => {
 			return httpGet(LM_GETREPLAYVIDEOS, { userid: uid, page_size: page, page_index: count });
-		}).then(data => {
-			return data.video_info; 
+		}).then(response => {
+			return response.data.video_info; 
 		});
 	},
 
@@ -154,7 +155,10 @@ module.exports = {
 	*/
 	getChatHistoryForVideo(u) {
 
-		/* 	actual return is not under variable.data but rather variable and 
+
+
+
+		/* 	actual return is not under response.data but rather response and 
 		 	must be split into array:
 		
 		  	OLD CODE:
@@ -208,11 +212,11 @@ module.exports = {
 			return resolve();
 		}).then(() => {
 			return httpGet(LM_KEYWORDSEARCH, { userid: uid, page_index: page, page_size: count, type: type, countryCode: country });
-		}).then(data => {
+		}).then(response => {
 			if (type == 1) { // list of users
-				return data.data_info; 
+				return response.data.data_info; 
 			} else if (type == 2) { // Video #tag search.
-				return data.data_info; 
+				return response.data.data_info; 
 			}
 		});
 
@@ -238,8 +242,8 @@ module.exports = {
 			return resolve();
 		}).then(() => {
 			return httpGet(LM_GETLIVEUSERS, { page_index: page, page_size: count });
-		}).then(data => {
-			return data.video_info; 
+		}).then(response => {
+			return response.data.video_info; 
 		});
 
 
