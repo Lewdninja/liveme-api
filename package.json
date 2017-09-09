@@ -1,6 +1,6 @@
 {
   "name": "liveme-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "LiveMe API for Node",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/thecoder75/liveme-api#readme",
   "dependencies": {
-    "axios": "^0.16.2",
-    "superagent-no-cache": "^0.1.1"
+    "axios": "^0.16.2"
   }
 }
