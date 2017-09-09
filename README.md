@@ -6,6 +6,8 @@
 [![npm](https://img.shields.io/npm/v/liveme-api.svg)](https://www.npmjs.com/package/liveme-api)
 [![npm](https://img.shields.io/npm/dt/liveme-api.svg)](https://www.npmjs.com/package/liveme-api)
 
+**Please note this API is no where near complete, the commands implemented are those that have been discovered and researched by developers across the globe.  The complete list of available Live.me API commands is protected and unavailable to the public. As we find more commands and understand them, we will add them to this module.**
+
 ## Installation
 `npm install liveme-api`
 
