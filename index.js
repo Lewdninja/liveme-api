@@ -156,7 +156,7 @@ module.exports = {
 			return false;
 		}
 
-		if (Count <= 0) {
+		if (count <= 0) {
 			console.log('FATAL ERROR: Count must be equal or greater than 1.');
 			return false;
 		}
@@ -191,7 +191,7 @@ module.exports = {
 			return false;
 		}
 
-		if (Count <= 0) {
+		if (count <= 0) {
 			console.log('FATAL ERROR: Count must be equal or greater than 1.');
 			return false;
 		}
