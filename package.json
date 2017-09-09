@@ -4,7 +4,7 @@
   "description": "LiveMe API for Node",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node test/all.js",
     "publish": "npm publish"
   },
   "engines": {
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/thecoder75/liveme-api#readme",
   "dependencies": {
-    "superagent": "^3.6.0",
+    "axios": "^0.16.2",
     "superagent-no-cache": "^0.1.1"
   }
 }
