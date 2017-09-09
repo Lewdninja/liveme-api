@@ -6,15 +6,31 @@
 [![npm](https://img.shields.io/npm/v/liveme-api.svg)](https://www.npmjs.com/package/liveme-api)
 [![npm](https://img.shields.io/npm/dt/liveme-api.svg)](https://www.npmjs.com/package/liveme-api)
 
-**This module is under heavy development AND IS NONFUNCTIONAL!!!**
-
 ## Installation
 `npm install liveme-api`
 
 ## Usage
 
-~~For usage details see the [LiveMe Desktop Tools](https://github.com/thecoder75/liveme-tools/) source code.~~
-***Example coming soon***
+Below is a basic example on how to use the LiveMe-API in your project.  See the [DOCS](https://github.com/thecoder75/liveme-api/docs) for details on each supported command.
+
+### Basic Example:
+
+```javascript
+const LiveMeAPI = require('liveme-api');
+
+livemeapi.getUserInfo('1234567890123456')
+	.then(user => {
+
+		//   user.user_info contains details on the user queried
+
+	})
+	.catch(err => {
+
+		// Unable to locate user account
+
+	});
+
+```
 
 ## Contributing
 To become a contributor, please message TheCoder75 (thecoder1975@gmail.com).
