@@ -17,5 +17,4 @@
 ***Example coming soon***
 
 ## Contributing
-To become a contributor, please message TheCoder.
-
+To become a contributor, please message TheCoder75 (thecoder1975@gmail.com).
