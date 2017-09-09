@@ -3,6 +3,8 @@
 
 [![Build Status](https://travis-ci.org/thecoder75/liveme-api.svg?branch=master)](https://travis-ci.org/thecoder75/liveme-api)
 [![Dependency Status](https://david-dm.org/thecoder75/liveme-api.svg)](https://david-dm.org/thecoder75/liveme-api)
+[![npm](https://img.shields.io/npm/v/liveme-api.svg)](https://www.npmjs.com/package/liveme-api)
+[![npm](https://img.shields.io/npm/dt/liveme-api.svg)](https://www.npmjs.com/package/liveme-api)
 
 **This module is under development at this time so may not be fully working yet.  Proceed with caution!!!**
 

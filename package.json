@@ -29,6 +29,6 @@
   },
   "homepage": "https://github.com/thecoder75/liveme-api#readme",
   "dependencies": {
-    "miniget": "^1.0.1"
+    "axios": "^0.16.2"
   }
 }
