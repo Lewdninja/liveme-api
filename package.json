@@ -1,11 +1,10 @@
 {
   "name": "liveme-api",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "LiveMe API for Node",
   "main": "index.js",
   "scripts": {
-    "test": "node test/all.js",
-    "publish": "npm publish"
+    "test": "node test/all.js"
   },
   "engines": {
     "node": ">=4.7.0"
