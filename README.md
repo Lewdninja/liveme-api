@@ -1,7 +1,8 @@
 # LiveMe API for Node
 [![NPM](https://nodei.co/npm/liveme-api.png)](https://nodei.co/npm/liveme-api/)
 
-Travis: [![Build Status](https://travis-ci.org/thecoder75/liveme-api.svg?branch=master)](https://travis-ci.org/thecoder75/liveme-api)
+[![Build Status](https://travis-ci.org/thecoder75/liveme-api.svg?branch=master)](https://travis-ci.org/thecoder75/liveme-api)
+[![Dependency Status](https://david-dm.org/thecoder75/liveme-api.svg)](https://david-dm.org/thecoder75/liveme-api)
 
 **This module is under development at this time so may not be fully working yet.  Proceed with caution!!!**
 
