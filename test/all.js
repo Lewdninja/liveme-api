@@ -47,7 +47,7 @@ livemeapi.getUserReplays(uidTest)
 		return_code = 1;
 	});
 
-livemeapi.performSearch('LiveMe%20Academy', 1, 10, 1)
+livemeapi.performSearch('Live.me%20Academy', 1, 10, 1)
 	.then(results => {
 		if (results.length > 0) {
 			console.log('performSearch() query test passed, got array of results.');
@@ -61,7 +61,7 @@ livemeapi.performSearch('LiveMe%20Academy', 1, 10, 1)
 		return_code = 1;
 	});
 
-livemeapi.performSearch('#training', 1, 10, 2)
+livemeapi.performSearch('training', 1, 10, 2)
 	.then(results => {
 		if (results.length > 0) {
 			console.log('performSearch() hashtag test passed, got array of results.');
@@ -89,8 +89,6 @@ livemeapi.getLive(1, 10)
 		console.log(`getLive() failed, ${err}`);
 		return_code = 1;
 	});
-
-console.log('\nAll tests '+(return_code ? 'PASSED!': 'FAILED!') + '\n');
 
 
 return return_code;
