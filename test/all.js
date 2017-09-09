@@ -3,7 +3,7 @@
 var livemeapi = require('../index'), return_code = 0;
 
 let uidTest = '828324394803003392'; // LiveMe Academy: 828324394803003392
-let vidTest = '1501537947672825f7645'; // Test Video: 15015379476728257645 - Live.me Broadcaster Adademy #training
+let vidTest = '15015379476728257645'; // Test Video: 15015379476728257645 - Live.me Broadcaster Adademy #training
 
 livemeapi.getUserInfo(uidTest)
 	.then(user => {
@@ -32,6 +32,20 @@ livemeapi.getVideoInfo(vidTest)
 		console.log(`getVideoInfo() failed, ${err}`);
 		return_code = 1;
 	})
+
+livemeapi.getUserReplays(uidTest)
+	.then(replays => {
+		if (replays.length > 0) {
+			console.log('getUserReplays() passed, got array of replays.');
+		} else {
+			console.log(`getUserReplays() failed, ${replays.length} replays returned`);
+			return_code = 1;
+		}
+	})
+	.catch(err => {
+		console.log(`getUserReplays() failed, ${err}`);
+		return_code = 1;
+	});
 
 /*
 

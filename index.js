@@ -77,8 +77,8 @@ module.exports = {
 		return httpGet(`${LM_GETVIDEOINFO}?userid=0&videoid=${vid}`)
 			.then(data => {
 				if (data.status == '200') {
-					if (data.data.vid == null) {
-						return Promise.reject('Error: 404 Message: Video does not exist'); // For some reason they send back empty data instead of saying it doesn't exist.
+					if (data.data.video_info.vid == null) {
+						return Promise.reject('Error: 500 Message: Video does not exist'); // For some reason they send back empty data instead of saying it doesn't exist.
 					}
 
 					return data.data.video_info;
@@ -104,7 +104,14 @@ module.exports = {
 		Returns: Promise of an array of Video objects
 	*/
 	getUserReplays: function (uid, page, count) {
-		return httpGet(LM_GETREPLAYVIDEOS + '?userid='+uid+'&page_size='+count+'&page_index='+page);
+		return httpGet(`${LM_GETREPLAYVIDEOS}?userid=${uid}&page_size=${count}&page_index=${page}`)
+			.then(data => {
+				if (data.status == 200) {
+					return data.data.video_info;
+				} else {
+					return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
+				}
+			});
 		/*
 		return new Promise((resolve, reject) => {
 			if (typeof page == 'undefined' || page == null) { page = 1; }
