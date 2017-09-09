@@ -47,27 +47,50 @@ livemeapi.getUserReplays(uidTest)
 		return_code = 1;
 	});
 
-/*
-
-console.log('\nChecking getVideoInfoSync...');
-var videoInfo = livemeapi.getVideoInfoSync('15015379476728257645');
-videoInfo.then((res) => {
-	if (res.video_info.vid != '15015379476728257645') {
+livemeapi.performSearch('LiveMe%20Academy', 1, 10, 1)
+	.then(results => {
+		if (results.length > 0) {
+			console.log('performSearch() query test passed, got array of results.');
+		} else {
+			console.log(`performSearch() query test failed, ${results.length} results returned`);
+			return_code = 1;
+		}
+	})
+	.catch(err => {
+		console.log(`performSearch() query test failed, ${err}`);
 		return_code = 1;
-	} else {
-		console.log('getVideoInfoSync passed, got video details back.');
-	}
-});
+	});
 
-// LiveMe Academy: 828324394803003392
-var replays = livemeapi.getUserReplaysSync('828324394803003392', 1, 2);
-replays.then((res) => {
-	if (res.video_info.length == 0) {
+livemeapi.performSearch('#training', 1, 10, 2)
+	.then(results => {
+		if (results.length > 0) {
+			console.log('performSearch() hashtag test passed, got array of results.');
+		} else {
+			console.log(`performSearch() hashtag test failed, ${results.length} results returned`);
+			return_code = 1;
+		}
+	})
+	.catch(err => {
+		console.log(`performSearch() hashtag test failed, ${err}`);
 		return_code = 1;
-	} else {
-		console.log('getUserReplaysSync passed, got an array of replays.');
-	}
-});*/
+	});
+
+
+livemeapi.getLive(1, 10)
+	.then(results => {
+		if (results.length > 0) {
+			console.log('getLive() passed, got array of videos.');
+		} else {
+			console.log(`getLive() failed, ${results.length} videos returned`);
+			return_code = 1;
+		}
+	})
+	.catch(err => {
+		console.log(`getLive() failed, ${err}`);
+		return_code = 1;
+	});
+
+console.log('\nAll tests '+(return_code ? 'PASSED!': 'FAILED!') + '\n');
 
 
 return return_code;
