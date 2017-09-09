@@ -23,17 +23,19 @@ const LM_GETUSERINFO = 'http://live.ksmobile.net/user/getinfo',
 
 /*
 	Local Functions
-*/
 
-function httpGet(url, query) {
+	AXIOS is built for use with Promise so it works perfectly here
+	plus doesn't require too f**king many modules like some others
+*/
+function httpGet(url) {
 	return new Promise((resolve, reject) => {
 		axios({
 			method: 'get',
-			url : url,
-			data: query
+			url : url
 		}).then(function(resp) {
-			return promises(resp);
+			return resolve(resp.data.data);
 		}).catch(function(err){
+			//console.log(err);
 			return reject(err);
 		});
 	});
@@ -50,6 +52,8 @@ module.exports = {
 		Returns: Promise of a User object
 	*/
 	getUserInfo: function (uid) {
+		return httpGet(LM_GETUSERINFO + '?userid='+uid);
+		/*
 		return new Promise((resolve, reject) => {
 			if (typeof uid == 'undefined' || uid == null || uid <= 0) {
 				return reject('Invalid user ID');
@@ -62,6 +66,7 @@ module.exports = {
 			.then(response => {
 				return response.data.user_info; 
 			});
+		*/
 	},
 
 	/*
@@ -72,7 +77,7 @@ module.exports = {
 	getUserInfoSync: async function (uid) {
 		return await this.getUserInfo(uid)
 			.catch(err => {
-				return null;
+				return err;
 			});
 	},
 
@@ -81,6 +86,8 @@ module.exports = {
 		Returns: Promise of a Video object
 	*/
 	getVideoInfo: function (vid) {
+		return httpGet(LM_GETVIDEOINFO + '?userid=0&videoid='+vid);
+		/*
 		return new Promise((resolve, reject) => {
 			if (typeof vid == 'undefined' || vid == null || vid <= 0) {
 				return reject('Invalid video ID');
@@ -93,6 +100,7 @@ module.exports = {
 		.then(response => {
 			return response.data; 	// Returns video_info & user_info objects for the video
 		});
+		*/
 	},
 
 	/*
@@ -114,6 +122,8 @@ module.exports = {
 		Returns: Promise of an array of Video objects
 	*/
 	getUserReplays: function (uid, page, count) {
+		return httpGet(LM_GETREPLAYVIDEOS + '?userid='+uid+'&page_size='+count+'&page_index='+page);
+		/*
 		return new Promise((resolve, reject) => {
 			if (typeof page == 'undefined' || page == null) { page = 1; }
 			if (typeof count == 'undefined' || count == null) { count = 10; }
@@ -128,10 +138,11 @@ module.exports = {
 
 			return resolve();
 		}).then(() => {
-			return httpGet(LM_GETREPLAYVIDEOS, { userid: uid, page_size: page, page_index: count });
+			return httpGet(LM_GETREPLAYVIDEOS, { userid: uid, page_size: count, page_index: page });
 		}).then(response => {
 			return response.data.video_info; 
 		});
+		*/
 	},
 
 	/*
