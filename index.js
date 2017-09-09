@@ -27,18 +27,16 @@ const LM_GETUSERINFO = 'http://live.ksmobile.net/user/getinfo',
 	AXIOS is built for use with Promise so it works perfectly here
 	plus doesn't require too f**king many modules like some others
 */
-function httpGet(url) {
-	return new Promise((resolve, reject) => {
-		axios({
-			method: 'get',
-			url : url
-		}).then(function(resp) {
-			return resolve(resp.data.data);
-		}).catch(function(err){
-			//console.log(err);
-			return reject(err);
+
+function httpGet(url, params = {}) {
+	return axios.get(url, params)
+		.then(response => {
+			if (response.status == 200) {
+				return response.data;
+			} else {
+				return reject(`HTTP Error: ${response.status}`);
+			}
 		});
-	});
 }
 
 /*
@@ -48,25 +46,18 @@ function httpGet(url) {
 module.exports = {
 
 	/*
-		uid: number
+		uid: string
 		Returns: Promise of a User object
 	*/
 	getUserInfo: function (uid) {
-		return httpGet(LM_GETUSERINFO + '?userid='+uid);
-		/*
-		return new Promise((resolve, reject) => {
-			if (typeof uid == 'undefined' || uid == null || uid <= 0) {
-				return reject('Invalid user ID');
-			}
-
-			return resolve();
-		}).then(() => {
-			return httpGet(LM_GETUSERINFO, { userid: uid })
-		})
-			.then(response => {
-				return response.data.user_info; 
+		return httpGet(`${LM_GETUSERINFO}?userid=${uid}`)
+			.then(data => {
+				if (data.status == '200') {
+					return data.data.user;
+				} else {
+					return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
+				}
 			});
-		*/
 	},
 
 	/*
@@ -74,11 +65,8 @@ module.exports = {
 		uid: number
 		Returns: User object, null on failure
 	*/
-	getUserInfoSync: async function (uid) {
-		return await this.getUserInfo(uid)
-			.catch(err => {
-				return err;
-			});
+	getUserInfoSync: function (uid) {
+		// TODO
 	},
 
 	/*
@@ -86,21 +74,18 @@ module.exports = {
 		Returns: Promise of a Video object
 	*/
 	getVideoInfo: function (vid) {
-		return httpGet(LM_GETVIDEOINFO + '?userid=0&videoid='+vid);
-		/*
-		return new Promise((resolve, reject) => {
-			if (typeof vid == 'undefined' || vid == null || vid <= 0) {
-				return reject('Invalid video ID');
-			}
+		return httpGet(`${LM_GETVIDEOINFO}?userid=0&videoid=${vid}`)
+			.then(data => {
+				if (data.status == '200') {
+					if (data.data.vid == null) {
+						return Promise.reject('Error: 404 Message: Video does not exist'); // For some reason they send back empty data instead of saying it doesn't exist.
+					}
 
-			return resolve();
-		}).then(() => {
-			return httpGet(LM_GETVIDEOINFO, { userid: 0, videoid: vid })
-		})
-		.then(response => {
-			return response.data; 	// Returns video_info & user_info objects for the video
-		});
-		*/
+					return data.data.video_info;
+				} else {
+					return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
+				}
+			});
 	},
 
 	/*
@@ -108,11 +93,8 @@ module.exports = {
 		vid: number
 		Returns: Video object, null on failure
 	*/
-	getVideoInfoSync: async function (vid) {
-		return await this.getVideoInfo(vid)
-			.catch(err => {
-				return null;
-			});
+	getVideoInfoSync: function (vid) {
+		// TODO
 	},
 
 	/*
@@ -153,10 +135,7 @@ module.exports = {
 		Returns: An array of Video objects, null on failure
 	*/
 	getUserReplaysSync: function (uid, page, count) {
-		return this.getUserReplays(uid, page, count)
-			.catch(err => {
-				return null;
-			});
+		// TODO
 	},
 
 

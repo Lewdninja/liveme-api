@@ -2,18 +2,39 @@
 
 var livemeapi = require('../index'), return_code = 0;
 
+let uidTest = '828324394803003392'; // LiveMe Academy: 828324394803003392
+let vidTest = '1501537947672825f7645'; // Test Video: 15015379476728257645 - Live.me Broadcaster Adademy #training
 
-// LiveMe Academy: 828324394803003392
-var userInfo = livemeapi.getUserInfoSync('828324394803003392');
-userInfo.then((res) => {
-	if (res.user.user_info.uid != '828324394803003392') {
+livemeapi.getUserInfo(uidTest)
+	.then(user => {
+		if (user.user_info.uid != uidTest) {
+			console.log(`getUserInfo() failed, ${uidTest} does not equal ${user.user_info.uid}`);
+			return_code = 1;
+		} else {
+			console.log('getUserInfo() passed, got user details back.');
+		}
+	})
+	.catch(err => {
+		console.log(`getUserInfo() failed, ${err}`);
 		return_code = 1;
-	} else {
-		console.log('getuserInfoSync passed, got user details back.');		
-	}
-});
+	});
 
-// Test Video: 15015379476728257645 - Live.me Broadcaster Adademy #training
+livemeapi.getVideoInfo(vidTest)
+	.then(video => {
+		if (video.vid != vidTest) {
+			console.log(`getVideoInfo() failed, ${vidTest} does not equal ${video.vid}`);
+			return_code = 1;
+		} else {
+			console.log('getVideoInfo() passed, got user details back.');
+		}
+	})
+	.catch(err => {
+		console.log(`getVideoInfo() failed, ${err}`);
+		return_code = 1;
+	})
+
+/*
+
 console.log('\nChecking getVideoInfoSync...');
 var videoInfo = livemeapi.getVideoInfoSync('15015379476728257645');
 videoInfo.then((res) => {
@@ -32,7 +53,7 @@ replays.then((res) => {
 	} else {
 		console.log('getUserReplaysSync passed, got an array of replays.');
 	}
-});
+});*/
 
 
 return return_code;
