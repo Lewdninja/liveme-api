@@ -27,12 +27,14 @@ const LM_GETUSERINFO = 'http://live.ksmobile.net/user/getinfo',
 
 function httpGet(url, query) {
 	return new Promise((resolve, reject) => {
-		axios.get(url, {
-			params: { query }
+		axios({
+			method: 'get',
+			url : url,
+			data: query
 		}).then(function(resp) {
-			return promises(JSON.parse(resp));
+			return promises(resp);
 		}).catch(function(err){
-			return rject(err);
+			return reject(err);
 		});
 	});
 }
