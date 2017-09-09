@@ -1,6 +1,6 @@
 {
   "name": "liveme-api",
-  "version": "0.0.2",
+  "version": "0.1.3",
   "description": "LiveMe API for Node",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "publish": "npm publish"
   },
   "engines": {
-    "node": ">=5.0.0"
+    "node": ">=4.7.0"
   },
   "repository": {
     "type": "git",
