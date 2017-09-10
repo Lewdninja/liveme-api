@@ -36,4 +36,16 @@ livemeapi.getUserInfo('1234567890123456')
 ```
 
 ## Contributing
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) 
+for details on our code of conduct, and the process for submitting pull 
+requests to us.
+
 To become a contributor, please message TheCoder75 (thecoder1975@gmail.com).
+
+## Developers
+* [thecoder75](https://github.com/thecoder75)
+* [polydragon](https://github.com/polydragon)
+
+## License
+This project is licensed under the GPL3 License - see the [LICENSE](LICENSE) 
+file for details
