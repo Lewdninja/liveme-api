@@ -1,6 +1,6 @@
 {
   "name": "liveme-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "LiveMe API for Node",
   "main": "index.js",
   "scripts": {

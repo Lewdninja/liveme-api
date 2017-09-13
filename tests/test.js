@@ -2,8 +2,8 @@
 
 var livemeapi = require('../index'), return_code = 0;
 
-let uidTest = '828324394803003392'; // LiveMe Academy: 828324394803003392
-let vidTest = '15015379476728257645'; // Test Video: 15015379476728257645 - Live.me Broadcaster Adademy #training
+let uidTest = '733517570313158656'; 
+let vidTest = '14981460596257911405'; 
 
 livemeapi.getUserInfo(uidTest)
 	.then(user => {
