@@ -19,7 +19,9 @@ const LM_GETUSERINFO = 'http://live.ksmobile.net/user/getinfo',
     LM_GETVIDEOINFO = 'http://live.ksmobile.net/live/queryinfo',
     LM_GETREPLAYVIDEOS = 'http://live.ksmobile.net/live/getreplayvideos',
     LM_KEYWORDSEARCH = 'http://live.ksmobile.net/search/searchkeyword',
-    LM_GETLIVEUSERS = 'https://live.ksmobile.net/live/newmaininfo';
+    LM_GETLIVEUSERS = 'https://live.ksmobile.net/live/newmaininfo',
+    LM_GETFANS = 'http://live.ksmobile.net/follow/getfollowerlistship', // page_size, page_index, access_token: uid
+    LM_GETFOLLOWING = 'http://live.ksmobile.net/follow/getfollowinglistship';
 
 /*
 	Local Functions
@@ -56,17 +58,15 @@ module.exports = {
             }
 
             return resolve();
-        })
-            .then(() => {
-                return httpGet(`${LM_GETUSERINFO}?userid=${uid}`);
-            })
-            .then(data => {
-                if (data.status == '200') {
-                    return data.data.user;
-                } else {
-                    return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
-                }
-            });
+        }).then(() => {
+            return httpGet(`${LM_GETUSERINFO}?userid=${uid}`);
+        }).then(data => {
+            if (data.status == '200') {
+                return data.data.user;
+            } else {
+                return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
+            }
+        });
     },
 
 	/*
@@ -223,6 +223,42 @@ module.exports = {
         }).then(data => {
             if (data.status == 200) {
                 return data.data.video_info;
+            } else {
+                return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
+            }
+        });
+    },
+
+    getFans: function(uid, size, page) {
+        return new Promise((resolve, reject) => {
+            if (typeof uid == 'undefined' || uid == null) {
+                return reject('Must pass a valid UID parameter to getFans(uid)');
+            }
+
+            return resolve();
+        }).then(() => {
+            return httpGet(`${LM_GETFANS}?access_token=${uid}&page_size=${size}&page_index=${page}`);
+        }).then(data => {
+            if (data.status == '200') {
+                return data.data;
+            } else {
+                return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
+            }
+        });
+    },
+
+    getFollowing: function(uid, size, page) {
+        return new Promise((resolve, reject) => {
+            if (typeof uid == 'undefined' || uid == null) {
+                return reject('Must pass a valid UID parameter to getFollowing(uid)');
+            }
+
+            return resolve();
+        }).then(() => {
+            return httpGet(`${LM_GETFOLLOWING}?access_token=${uid}&page_size=${size}&page_index=${page}`);
+        }).then(data => {
+            if (data.status == '200') {
+                return data.data;
             } else {
                 return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
             }

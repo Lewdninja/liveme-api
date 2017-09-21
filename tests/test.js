@@ -91,4 +91,32 @@ livemeapi.getLive(1, 10)
 	});
 
 
+livemeapi.getFans(uidTest, 10, 1)
+    .then(results => {
+        if (results.length > 0) {
+			console.log('getFans() passed, got array of videos.');
+        } else {
+			console.log(`getFans() failed, ${results.length} videos returned`);
+			return_code = 1;
+        }
+    })
+    .catch(err => {
+		console.log(`getFans() failed, ${err}`);
+		return_code = 1;
+    });
+
+livemeapi.getFollowing(uidTest, 10, 1)
+    .then(results => {
+        if (results.length > 0) {
+			console.log('getFollowing() passed, got array of videos.');
+        } else {
+			console.log(`getFollowing() failed, ${results.length} videos returned`);
+			return_code = 1;
+        }
+    })
+    .catch(err => {
+		console.log(`getFollowing() failed, ${err}`);
+		return_code = 1;
+    });
+
 return return_code;
