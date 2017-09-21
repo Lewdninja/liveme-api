@@ -20,8 +20,9 @@ const LM_GETUSERINFO = 'http://live.ksmobile.net/user/getinfo',
     LM_GETREPLAYVIDEOS = 'http://live.ksmobile.net/live/getreplayvideos',
     LM_KEYWORDSEARCH = 'http://live.ksmobile.net/search/searchkeyword',
     LM_GETLIVEUSERS = 'https://live.ksmobile.net/live/newmaininfo',
-    LM_GETFANS = 'http://live.ksmobile.net/follow/getfollowerlistship', // page_size, page_index, access_token: uid
-    LM_GETFOLLOWING = 'http://live.ksmobile.net/follow/getfollowinglistship';
+    LM_GETFANS = 'http://live.ksmobile.net/follow/getfollowerlistship',
+    LM_GETFOLLOWING = 'http://live.ksmobile.net/follow/getfollowinglistship',
+    LM_GETTRENDINGHASHTAGS = 'http://live.ksmobile.net/search/getTags';
 
 /*
 	Local Functions
@@ -229,7 +230,7 @@ module.exports = {
         });
     },
 
-    getFans: function(uid, size, page) {
+    getFans: function (uid, size, page) {
         return new Promise((resolve, reject) => {
             if (typeof uid == 'undefined' || uid == null) {
                 return reject('Must pass a valid UID parameter to getFans(uid)');
@@ -247,7 +248,7 @@ module.exports = {
         });
     },
 
-    getFollowing: function(uid, size, page) {
+    getFollowing: function (uid, size, page) {
         return new Promise((resolve, reject) => {
             if (typeof uid == 'undefined' || uid == null) {
                 return reject('Must pass a valid UID parameter to getFollowing(uid)');
@@ -263,6 +264,17 @@ module.exports = {
                 return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
             }
         });
+    },
+
+    getTrendingHashtags: function () {
+        return httpGet(LM_GETTRENDINGHASHTAGS)
+            .then(data => {
+                if (data.status == 200) {
+                    return data.data;
+                } else {
+                    return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
+                }
+            });
     }
 };
 
