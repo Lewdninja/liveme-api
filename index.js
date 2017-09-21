@@ -22,7 +22,9 @@ const LM_GETUSERINFO = 'http://live.ksmobile.net/user/getinfo',
     LM_GETLIVEUSERS = 'https://live.ksmobile.net/live/newmaininfo',
     LM_GETFANS = 'http://live.ksmobile.net/follow/getfollowerlistship',
     LM_GETFOLLOWING = 'http://live.ksmobile.net/follow/getfollowinglistship',
-    LM_GETTRENDINGHASHTAGS = 'http://live.ksmobile.net/search/getTags';
+    LM_GETTRENDINGHASHTAGS = 'http://live.ksmobile.net/search/getTags',
+    LM_GETLIVEGIRLS = 'http://live.ksmobile.net/live/girls',
+    LM_GETLIVEBOYS = 'http://live.ksmobile.net/live/boys';
 
 /*
 	Local Functions
@@ -275,6 +277,66 @@ module.exports = {
                     return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
                 }
             });
+    },
+
+    getLiveGirls: function(page, size) {
+        return new Promise((resolve, reject) => {
+            if (typeof page == 'undefined' || page == null) {
+                page = 1;
+            }
+
+            if (typeof size == 'undefined' || size == null) {
+                size = 10;
+            }
+
+            if (page <= 0) {
+                return reject('Page must be equal or greater than 1');
+            }
+
+            if (size <= 0) {
+                return reject('Size must be equal or greater than 1');
+            }
+
+            return resolve();
+        }).then(() => {
+            return httpGet(`${LM_GETLIVEGIRLS}?page_size=${size}&page_index=${page}`);
+        }).then(data => {
+            if (data.status == 200) {
+                return data.data;
+            } else {
+                return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
+            }
+        });
+    },
+
+    getLiveBoys: function(page, size) {
+        return new Promise((resolve, reject) => {
+            if (typeof page == 'undefined' || page == null) {
+                page = 1;
+            }
+
+            if (typeof size == 'undefined' || size == null) {
+                size = 10;
+            }
+
+            if (page <= 0) {
+                return reject('Page must be equal or greater than 1');
+            }
+
+            if (size <= 0) {
+                return reject('Size must be equal or greater than 1');
+            }
+
+            return resolve();
+        }).then(() => {
+            return httpGet(`${LM_GETLIVEBOYS}?page_size=${size}&page_index=${page}`);
+        }).then(data => {
+            if (data.status == 200) {
+                return data.data;
+            } else {
+                return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
+            }
+        });
     }
 };
 
