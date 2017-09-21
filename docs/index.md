@@ -40,6 +40,25 @@
 
 ***Returns:** Returns an array of Objects each describing a message posted.
 
+### getFans
+
+**Syntax:** getFans(userid, count, page)
+
+**Parameters:**
+*userid* - The User ID of an account.
+*count* - How many to list or fetch per page of results.
+*page* - What page to start listing results from (Must be at least 1.)
+
+
+### getFollowing
+
+**Syntax:** getFollowing(userid, count, page)
+
+**Parameters:**
+*userid* - The User ID of an account.
+*count* - How many to list or fetch per page of results.
+*page* - What page to start listing results from (Must be at least 1.)
+
 ### performSearch
 
 **Syntax:** performSearch(query, page, count, type, country) 
@@ -53,3 +72,22 @@
 
 **Returns:** An array of Objects with minimal information.
 
+### getLiveGirls
+
+**Syntax:** getLiveGirls(page, count)
+
+**Parameters:**
+*page* - What page to start listing results from (Must be at least 1.)
+*count* - How many to list or fetch per page of results.
+
+### getLiveBoys
+
+**Syntax:** getLiveBoys(page, count)
+
+**Parameters:**
+*page* - What page to start listing results from (Must be at least 1.)
+*count* - How many to list or fetch per page of results.
+
+### getTrendingHashtags
+
+**Syntax:** getTrendingHashtags()
