@@ -232,8 +232,24 @@ module.exports = {
         });
     },
 
-    getFans: function (uid, size, page) {
+    getFans: function (uid, page, size) {
         return new Promise((resolve, reject) => {
+            if (typeof page == 'undefined' || page == null) {
+                page = 1;
+            }
+
+            if (typeof size == 'undefined' || size == null) {
+                size = 10;
+            }
+
+            if (page <= 0) {
+                return reject('Page must be equal or greater than 1');
+            }
+
+            if (size <= 0) {
+                return reject('Count must be equal or greater than 1');
+            }
+
             if (typeof uid == 'undefined' || uid == null) {
                 return reject('Must pass a valid UID parameter to getFans(uid)');
             }
@@ -250,8 +266,24 @@ module.exports = {
         });
     },
 
-    getFollowing: function (uid, size, page) {
+    getFollowing: function (uid, page, size) {
         return new Promise((resolve, reject) => {
+            if (typeof page == 'undefined' || page == null) {
+                page = 1;
+            }
+
+            if (typeof size == 'undefined' || size == null) {
+                size = 10;
+            }
+
+            if (page <= 0) {
+                return reject('Page must be equal or greater than 1');
+            }
+
+            if (size <= 0) {
+                return reject('Count must be equal or greater than 1');
+            }
+            
             if (typeof uid == 'undefined' || uid == null) {
                 return reject('Must pass a valid UID parameter to getFollowing(uid)');
             }
