@@ -188,7 +188,7 @@ module.exports = {
 
             return resolve();
         }).then(() => {
-            return httpGet(`${LM_KEYWORDSEARCH}?keyword=${query}&type=${type}&page_size=${count}&page_index=${page}&countryCode=${country}`);
+            return httpGet(`${LM_KEYWORDSEARCH}?keyword=${query}&type=${type}&page_size=${count}&page=${page}&countryCode=${country}`);
         }).then(data => {
             if (data.status == 200) {
                 return data.data.data_info;
