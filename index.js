@@ -188,7 +188,7 @@ module.exports = {
 
             return resolve();
         }).then(() => {
-            return httpGet(`${LM_KEYWORDSEARCH}?keyword=${query}&type=${type}&page_size=${count}&page=${page}&countryCode=${country}`);
+            return httpGet(`${LM_KEYWORDSEARCH}?keyword=${query}&type=${type}&page_size=${count}&page_index=${page}&countryCode=${country}`);
         }).then(data => {
             if (data.status == 200) {
                 return data.data.data_info;
@@ -331,7 +331,7 @@ module.exports = {
 
             return resolve();
         }).then(() => {
-            return httpGet(`${LM_GETLIVEGIRLS}?page_size=${size}&page_index=${page}`);
+            return httpGet(`${LM_GETLIVEGIRLS}?page_size=${size}&page=${page}`);
         }).then(data => {
             if (data.status == 200) {
                 return data.data;
@@ -361,7 +361,7 @@ module.exports = {
 
             return resolve();
         }).then(() => {
-            return httpGet(`${LM_GETLIVEBOYS}?page_size=${size}&page_index=${page}`);
+            return httpGet(`${LM_GETLIVEBOYS}?page_size=${size}&page=${page}`);
         }).then(data => {
             if (data.status == 200) {
                 return data.data;
