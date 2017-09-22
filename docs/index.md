@@ -42,22 +42,22 @@
 
 ### getFans
 
-**Syntax:** getFans(userid, count, page)
+**Syntax:** getFans(userid, page, count)
 
 **Parameters:**
 *userid* - The User ID of an account.
-*count* - How many to list or fetch per page of results.
 *page* - What page to start listing results from (Must be at least 1.)
+*count* - How many to list or fetch per page of results.
 
 
 ### getFollowing
 
-**Syntax:** getFollowing(userid, count, page)
+**Syntax:** getFollowing(userid, page, count)
 
 **Parameters:**
 *userid* - The User ID of an account.
-*count* - How many to list or fetch per page of results.
 *page* - What page to start listing results from (Must be at least 1.)
+*count* - How many to list or fetch per page of results.
 
 ### performSearch
 
