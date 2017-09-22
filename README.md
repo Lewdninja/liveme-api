@@ -12,9 +12,9 @@
 
 ## Usage
 
-Below is a basic example on how to use the LiveMe-API in your project.  See the [Reference Manual](https://github.com/thecoder75/liveme-api/docs/index.md) for details on each supported command.
+Below is a basic example on how to use the LiveMe-API in your project.  See the [Reference Manual](https://github.com/thecoder75/liveme-api/blob/master/docs/index.md) for details on each supported command.
 
-***API syntax and available commands are subject to change as we continue to research and improve this module!***
+For a complete example on how this module can be used, see the [LiveMe Tools](https://github.com/thecoder75/liveme-tools/) source for complete details.
 
 ### Basic Example:
 
@@ -23,14 +23,10 @@ const LiveMeAPI = require('liveme-api');
 
 livemeapi.getUserInfo('1234567890123456')
 	.then(user => {
-
 		//   user.user_info contains details on the user queried
-
 	})
 	.catch(err => {
-
 		// Unable to locate user account
-
 	});
 
 ```
