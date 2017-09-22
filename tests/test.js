@@ -31,7 +31,7 @@ livemeapi.getVideoInfo(vidTest)
 	.catch(err => {
 		console.log(`getVideoInfo() failed, ${err}`);
 		return_code = 1;
-	})
+	});
 
 livemeapi.getUserReplays(uidTest)
 	.then(replays => {
@@ -75,7 +75,6 @@ livemeapi.performSearch('training', 1, 10, 2)
 		return_code = 1;
 	});
 
-
 livemeapi.getLive(1, 10)
 	.then(results => {
 		if (results.length > 0) {
@@ -90,8 +89,7 @@ livemeapi.getLive(1, 10)
 		return_code = 1;
 	});
 
-
-livemeapi.getFans(uidTest, 10, 1)
+livemeapi.getFans(uidTest, 1, 10)
     .then(results => {
         if (results.length > 0) {
 			console.log('getFans() passed, got array of videos.');
@@ -105,7 +103,7 @@ livemeapi.getFans(uidTest, 10, 1)
 		return_code = 1;
     });
 
-livemeapi.getFollowing(uidTest, 10, 1)
+livemeapi.getFollowing(uidTest, 1, 10)
     .then(results => {
         if (results.length > 0) {
 			console.log('getFollowing() passed, got array of videos.');
