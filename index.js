@@ -138,17 +138,7 @@ module.exports = {
     getChatHistoryForVideo(url) {
         return axios.get(url)
             .then(response => {
-                var list = [], items = response.split('\n');
-
-                for (var item in items) {
-                    try {
-                        list.push(JSON.parse(item));
-                    } catch (err) {
-                        // Sometimes returns malformed json - just ignore it.
-                    }
-                }
-
-                return list;
+                return response;
             });
     },
 
