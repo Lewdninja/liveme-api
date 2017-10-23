@@ -188,11 +188,7 @@ module.exports = {
         });
     },
 
-	/*
-		page: number (default 1)
-		count: number (default 1)
-	*/
-    getLive: function (page, count) {
+    getLive: function (page, count, country) {
         return new Promise((resolve, reject) => {
             if (typeof page == 'undefined' || page == null) {
                 page = 1;
@@ -212,7 +208,7 @@ module.exports = {
 
             return resolve();
         }).then(() => {
-            return httpGet(`${LM_GETLIVEUSERS}?page_size=${count}&page_index=${page}`);
+            return httpGet(`${LM_GETLIVEUSERS}?page_size=${count}&page_index=${page}&countryCode=${country}`);
         }).then(data => {
             if (data.status == 200) {
                 return data.data.video_info;
@@ -301,7 +297,7 @@ module.exports = {
             });
     },
 
-    getLiveGirls: function(page, size) {
+    getLiveGirls: function(page, size, country) {
         return new Promise((resolve, reject) => {
             if (typeof page == 'undefined' || page == null) {
                 page = 1;
@@ -321,7 +317,7 @@ module.exports = {
 
             return resolve();
         }).then(() => {
-            return httpGet(`${LM_GETLIVEGIRLS}?page_size=${size}&page=${page}`);
+            return httpGet(`${LM_GETLIVEGIRLS}?page_size=${size}&page=${page}&countryCode=${country}`);
         }).then(data => {
             if (data.status == 200) {
                 return data.data;
@@ -331,7 +327,7 @@ module.exports = {
         });
     },
 
-    getLiveBoys: function(page, size) {
+    getLiveBoys: function(page, size, country) {
         return new Promise((resolve, reject) => {
             if (typeof page == 'undefined' || page == null) {
                 page = 1;
@@ -351,7 +347,7 @@ module.exports = {
 
             return resolve();
         }).then(() => {
-            return httpGet(`${LM_GETLIVEBOYS}?page_size=${size}&page=${page}`);
+            return httpGet(`${LM_GETLIVEBOYS}?page_size=${size}&page=${page}&countryCode=${country}`);
         }).then(data => {
             if (data.status == 200) {
                 return data.data;
