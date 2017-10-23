@@ -188,7 +188,7 @@ module.exports = {
         });
     },
 
-    getLive: function (page, count, country) {
+    getLive: function (page, count) {
         return new Promise((resolve, reject) => {
             if (typeof page == 'undefined' || page == null) {
                 page = 1;
@@ -208,7 +208,7 @@ module.exports = {
 
             return resolve();
         }).then(() => {
-            return httpGet(`${LM_GETLIVEUSERS}?page_size=${count}&page_index=${page}&countryCode=${country}`);
+            return httpGet(`${LM_GETLIVEUSERS}?page_size=${count}&page_index=${page}`);
         }).then(data => {
             if (data.status == 200) {
                 return data.data.video_info;
@@ -297,7 +297,7 @@ module.exports = {
             });
     },
 
-    getLiveGirls: function(page, size, country) {
+    getLiveGirls: function(page, size) {
         return new Promise((resolve, reject) => {
             if (typeof page == 'undefined' || page == null) {
                 page = 1;
@@ -317,7 +317,7 @@ module.exports = {
 
             return resolve();
         }).then(() => {
-            return httpGet(`${LM_GETLIVEGIRLS}?page_size=${size}&page=${page}&countryCode=${country}`);
+            return httpGet(`${LM_GETLIVEGIRLS}?page_size=${size}&page=${page}`);
         }).then(data => {
             if (data.status == 200) {
                 return data.data;
@@ -327,7 +327,7 @@ module.exports = {
         });
     },
 
-    getLiveBoys: function(page, size, country) {
+    getLiveBoys: function(page, size) {
         return new Promise((resolve, reject) => {
             if (typeof page == 'undefined' || page == null) {
                 page = 1;
@@ -347,7 +347,7 @@ module.exports = {
 
             return resolve();
         }).then(() => {
-            return httpGet(`${LM_GETLIVEBOYS}?page_size=${size}&page=${page}&countryCode=${country}`);
+            return httpGet(`${LM_GETLIVEBOYS}?page_size=${size}&page=${page}`);
         }).then(data => {
             if (data.status == 200) {
                 return data.data;
