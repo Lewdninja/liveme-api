@@ -34,6 +34,7 @@ const LM_GETUSERINFO = 'http://live.ksmobile.net/user/getinfo',
 */
 
 function httpGet(url, params = {}) {
+    axios.defaults.headers.common['d'] = '';
     return axios.get(url, params)
         .then(response => {
             if (response.status == 200) {
