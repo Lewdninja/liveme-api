@@ -1,10 +1,10 @@
 # LiveMe API Reference
 
-** This document is under constant construction and will change periodically **
+**This document is subject to periodic updates by the contributors as commands are added or adjusted.**
 
 ### getUserInfo
 
-**Syntax:** getUserInfo(userid)
+**Syntax:** `getUserInfo(userid)`
 
 **Parameters:**
 *userid* - The User ID of an account.
@@ -13,7 +13,7 @@
 
 ### getVideoInfo
 
-**Syntax:** getVideoInfo(videoid)
+**Syntax:** `getVideoInfo(videoid)`
 
 **Parameters:**
 *videoid* - The Video ID of a video.
@@ -22,7 +22,7 @@
 
 ### getUserReplays
 
-**Syntax:** getUserReplays(userid, page, count)
+**Syntax:** `getUserReplays(userid, page, count)`
 
 **Parameters:**
 *userid* - The User ID of an account.
@@ -33,16 +33,16 @@
 
 ### getChatHistoryForVideo
 
-**Syntax:** getChatHistoryForVideo(chat_url)
+**Syntax:** `getChatHistoryForVideo(msgfile)`
 
 **Parameters:**
-*chat_url* - The chat url for a video, can be found in the returned data from either **getVideoInfo** or **getUserReplays**.
+*msgfile* - The message file URL for a video, can be found in the returned data from either `getVideoInfo` or `getUserReplays` as `msgfile`.  This command **WILL NOT** work on live feeds, only replays.
 
 ***Returns:** Returns an array of Objects each describing a message posted.
 
 ### getFans
 
-**Syntax:** getFans(userid, page, count)
+**Syntax:** `getFans(userid, page, count)`
 
 **Parameters:**
 *userid* - The User ID of an account.
@@ -52,7 +52,7 @@
 
 ### getFollowing
 
-**Syntax:** getFollowing(userid, page, count)
+**Syntax:** `getFollowing(userid, page, count)`
 
 **Parameters:**
 *userid* - The User ID of an account.
@@ -61,7 +61,7 @@
 
 ### performSearch
 
-**Syntax:** performSearch(query, page, count, type, country) 
+**Syntax:** `performSearch(query, page, count, type, country) `
 
 **Parameters:**
 *query* - Containing what to search for, depending on type of search.  Can be a partial or full User's name or a hashtag.
@@ -74,7 +74,7 @@
 
 ### getLiveGirls
 
-**Syntax:** getLiveGirls(page, count)
+**Syntax:** `getLiveGirls(page, count)`
 
 **Parameters:**
 *page* - What page to start listing results from (Must be at least 1.)
@@ -82,7 +82,7 @@
 
 ### getLiveBoys
 
-**Syntax:** getLiveBoys(page, count)
+**Syntax:** `getLiveBoys(page, count)`
 
 **Parameters:**
 *page* - What page to start listing results from (Must be at least 1.)
@@ -90,4 +90,7 @@
 
 ### getTrendingHashtags
 
-**Syntax:** getTrendingHashtags()
+**Syntax:** `getTrendingHashtags()`
+
+**Returns:** An array of popular or most active hash tags.
+
