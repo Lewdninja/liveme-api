@@ -180,7 +180,7 @@ module.exports = {
             return resolve();
         }).then(() => {
             const encodedQuery = encodeURIComponent(query);
-            return httpGet(`${LM_KEYWORDSEARCH}?keyword=${encodedQuery}&type=${type}&page_size=${count}&page_index=${page}&countryCode=${country}`);
+            return httpGet(`${LM_KEYWORDSEARCH}?keyword=${encodedQuery}&type=${type}&pagesize=${count}&page=${page}&countryCode=${country}`);
         }).then(data => {
             if (data.status == 200) {
                 return data.data.data_info;
