@@ -1,14 +1,18 @@
 # LiveMe API for Node
 [![NPM](https://nodei.co/npm/liveme-api.png)](https://nodei.co/npm/liveme-api/)
 
-[![Build Status](https://travis-ci.org/thecoder75/liveme-api.svg?branch=master)](https://travis-ci.org/thecoder75/liveme-api)
-[![Dependency Status](https://david-dm.org/thecoder75/liveme-api.svg)](https://david-dm.org/thecoder75/liveme-api)
-[![npm](https://img.shields.io/npm/v/liveme-api.svg)](https://www.npmjs.com/package/liveme-api)
-[![npm](https://img.shields.io/npm/dt/liveme-api.svg)](https://www.npmjs.com/package/liveme-api)
+[![License](https://img.shields.io/thecoder75/l/liveme-api.svg?label=License)]
+[![Build Status](https://img.shields.io/travis/thecoder75/liveme-api.svg?label=Build%20Status)](https://travis-ci.org/thecoder75/liveme-api)
+[![dependencies](https://img.shields.io/david/expressjs/express.svg?label=Dependencies)](https://david-dm.org/thecoder75/liveme-api)
+[![npm](https://img.shields.io/npm/v/liveme-api.svg?label=Current%20Version)](https://www.npmjs.com/package/liveme-api)
+[![npm](https://img.shields.io/npm/dt/liveme-api.svg?label=Downloads)](https://www.npmjs.com/package/liveme-api)
+
 
 
 ## Installation
 `npm install liveme-api`
+or
+`yarn install liveme-api`
 
 ## Usage
 
@@ -31,17 +35,10 @@ livemeapi.getUserInfo('1234567890123456')
 
 ```
 
-## Contributing
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) 
-for details on our code of conduct, and the process for submitting pull 
-requests to us.
-
-To become a contributor, please message TheCoder75 (thecoder1975@gmail.com).
-
 ## Developers
 * [thecoder75](https://github.com/thecoder75)
 * [polydragon](https://github.com/polydragon)
 
 ## License
-This project is licensed under the GPL3 License - see the [LICENSE](LICENSE) 
+This project is licensed under the GPL-3 License - see the [LICENSE](LICENSE)
 file for details
