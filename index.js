@@ -43,24 +43,7 @@ function httpGet(url, params = {}) {
 /*
 	Exported Functions
 */
-
-class LiveMeAPI {
-    function construct(proxy = {}) {
-        this.proxy = {};
-    }
-
-
-}
-
-exports.LiveMeAPI = LiveMeAPI;
-
-
 module.exports = {
-
-    proxySettings: function(e) {
-
-    }
-
 
 	/*
 		uid: string
