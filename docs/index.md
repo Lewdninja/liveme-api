@@ -3,8 +3,8 @@ layout: default
 title: LiveMe API
 description: A node module designed to make querying and using Live.me video social network easy.
 ---
-[![Build Status](https://img.shields.io/travis/thecoder75/liveme-api.svg?label=Build%20Status)](https://travis-ci.org/thecoder75/liveme-api)
-[![dependencies](https://img.shields.io/david/expressjs/express.svg?label=Dependencies)](https://david-dm.org/thecoder75/liveme-api)
+[![Build Status](https://img.shields.io/travis/thecoder75/liveme-api.svg?label=Build%20Status?style=flat-squar)](https://travis-ci.org/thecoder75/liveme-api)
+[![dependencies](https://img.shields.io/david/expressjs/express.svg?label=Dependencies?style=flat-squar)](https://david-dm.org/thecoder75/liveme-api)
 ![release](https://img.shields.io/github/release/thecoder75/liveme-api.svg?style=flat-square)
 ![node-version](https://img.shields.io/node/v/liveme-api.svg?style=flat-square)
 
