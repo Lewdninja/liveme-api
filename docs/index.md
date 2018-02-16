@@ -1,96 +1,53 @@
-# LiveMe API Reference
+---
+layout: default
+title: LiveMe API
+description: A node module designed to make querying and using Live.me video social network easy.
+---
+![npm-version](https://img.shields.io/npm/v/liveme-api.svg?style=flat-square)
+![node-version](https://img.shields.io/node/v/liveme-api.svg?style=flat-square)
+[![Build Status](https://img.shields.io/travis/thecoder75/liveme-api.svg?label=Build%20Status)](https://travis-ci.org/thecoder75/liveme-api)
+[![dependencies](https://img.shields.io/david/expressjs/express.svg?label=Dependencies)](https://david-dm.org/thecoder75/liveme-api)
 
-**This document is subject to periodic updates by the contributors as commands are added or adjusted.**
+## Installing
+![release](https://img.shields.io/github/release/thecoder75/liveme-pro-tools.svg?style=flat-square)
+![total-downloads](https://img.shields.io/npm/dt/liveme-api.svg?style=flat-square)
+![monthly-downloads](https://img.shields.io/npm/dm/liveme-api.svg?style=flat-square)
+![weekly-downloads](https://img.shields.io/npm/dw/liveme-api.svg?style=flat-square)
+![latest-release-downloads](https://img.shields.io/npm/dtv/liveme-api.svg?style=flat-square)
 
-### getUserInfo
+You can install using either `npm` or `yarn` as shown below:
+```
+npm install liveme-api
+```
+or
+```
+yarn add liveme-api
+```
 
-**Syntax:** `getUserInfo(userid)`
+## Projects Using This Module
 
-**Parameters:**
-*userid* - The User ID of an account.
+### Basic Example:
 
-**Returns:** Object containing all avaialble information on the userid provided if found.
+```javascript
+const LiveMeAPI = require('liveme-api');
 
-### getVideoInfo
+livemeapi.getUserInfo('1234567890123456')
+    .then(user => {
+        //   user.user_info contains details on the user queried
+    })
+    .catch(err => {
+        // Unable to locate user account
+    });
 
-**Syntax:** `getVideoInfo(videoid)`
+```
 
-**Parameters:**
-*videoid* - The Video ID of a video.
+### Detailed Command Documentation
 
-**Returns:** Objects containing details on the video with the id of videoid and the user account that posted it.
+We have documented all of the exposed commands [here](api.md) for easy reading.
 
-### getUserReplays
+### Maintainers
+* [thecoder75](https://github.com/thecoder75)
+* [polydragon](https://github.com/polydragon)
 
-**Syntax:** `getUserReplays(userid, page, count)`
-
-**Parameters:**
-*userid* - The User ID of an account.
-*page* - What page to start listing results from (Must be at least 1.)
-*count* - How many to list or fetch per page of results.
-
-**Returns:** An array of Objects each describing a video posted by the user still available for replay.
-
-### getChatHistoryForVideo
-
-**Syntax:** `getChatHistoryForVideo(msgfile)`
-
-**Parameters:**
-*msgfile* - The message file URL for a video, can be found in the returned data from either `getVideoInfo` or `getUserReplays` as `msgfile`.  This command **WILL NOT** work on live feeds, only replays.
-
-***Returns:** Returns an array of Objects each describing a message posted.
-
-### getFans
-
-**Syntax:** `getFans(userid, page, count)`
-
-**Parameters:**
-*userid* - The User ID of an account.
-*page* - What page to start listing results from (Must be at least 1.)
-*count* - How many to list or fetch per page of results.
-
-
-### getFollowing
-
-**Syntax:** `getFollowing(userid, page, count)`
-
-**Parameters:**
-*userid* - The User ID of an account.
-*page* - What page to start listing results from (Must be at least 1.)
-*count* - How many to list or fetch per page of results.
-
-### performSearch
-
-**Syntax:** `performSearch(query, page, count, type, country) `
-
-**Parameters:**
-*query* - Containing what to search for, depending on type of search.  Can be a partial or full User's name or a hashtag.
-*page* - What page to start listing results from (Must be at least 1.)
-*count* - How many to list or fetch per page of results.
-*type* - Set to 1 if searching by User's name, or 2 if performing a hashtag search.
-*country* - (Optional) The country code you would like to limit your search to.
-
-**Returns:** An array of Objects with minimal information.
-
-### getLiveGirls
-
-**Syntax:** `getLiveGirls(page, count)`
-
-**Parameters:**
-*page* - What page to start listing results from (Must be at least 1.)
-*count* - How many to list or fetch per page of results.
-
-### getLiveBoys
-
-**Syntax:** `getLiveBoys(page, count)`
-
-**Parameters:**
-*page* - What page to start listing results from (Must be at least 1.)
-*count* - How many to list or fetch per page of results.
-
-### getTrendingHashtags
-
-**Syntax:** `getTrendingHashtags()`
-
-**Returns:** An array of popular or most active hash tags.
-
+### Contributing
+If you would like to contribute to this project, please submit a pull request with your code updates.  We ask that you adhere to our coding style and follow our file layout design.

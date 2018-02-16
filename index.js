@@ -1,18 +1,16 @@
 'use strict';
 /*
-
-	  _     _           __  __           _    ____ ___ 
+	  _     _           __  __           _    ____ ___
 	 | |   (_)_   _____|  \/  | ___     / \  |  _ \_ _|
-	 | |   | \ \ / / _ \ |\/| |/ _ \   / _ \ | |_) | | 
-	 | |___| |\ V /  __/ |  | |  __/  / ___ \|  __/| | 
+	 | |   | \ \ / / _ \ |\/| |/ _ \   / _ \ | |_) | |
+	 | |___| |\ V /  __/ |  | |  __/  / ___ \|  __/| |
 	 |_____|_| \_/ \___|_|  |_|\___| /_/   \_\_|  |___|
-	                                                   	
-
+	                                            v2.0.0     	
 */
 
 const axios = require('axios');
 
-/* 
+/*
 	Constants
 */
 const LM_GETUSERINFO = 'http://live.ksmobile.net/user/getinfo',
@@ -28,9 +26,6 @@ const LM_GETUSERINFO = 'http://live.ksmobile.net/user/getinfo',
 
 /*
 	Local Functions
-
-	AXIOS is built for use with Promise so it works perfectly here
-	plus doesn't require too f**king many modules like some others
 */
 
 function httpGet(url, params = {}) {
@@ -49,7 +44,23 @@ function httpGet(url, params = {}) {
 	Exported Functions
 */
 
+class LiveMeAPI {
+    function construct(proxy = {}) {
+        this.proxy = {};
+    }
+
+
+}
+
+exports.LiveMeAPI = LiveMeAPI;
+
+
 module.exports = {
+
+    proxySettings: function(e) {
+
+    }
+
 
 	/*
 		uid: string
@@ -271,7 +282,7 @@ module.exports = {
             if (size <= 0) {
                 return reject('Count must be equal or greater than 1');
             }
-            
+
             if (typeof uid == 'undefined' || uid == null) {
                 return reject('Must pass a valid UID parameter to getFollowing(uid)');
             }
@@ -359,4 +370,3 @@ module.exports = {
         });
     }
 };
-
