@@ -6,7 +6,6 @@ description: A node module designed to make querying and using Live.me video soc
 [![Build Status](https://img.shields.io/travis/thecoder75/liveme-api.svg?label=Build%20Status)](https://travis-ci.org/thecoder75/liveme-api)
 [![dependencies](https://img.shields.io/david/expressjs/express.svg?label=Dependencies)](https://david-dm.org/thecoder75/liveme-api)
 ![release](https://img.shields.io/github/release/thecoder75/liveme-api.svg?style=flat-square)
-![npm-version](https://img.shields.io/npm/v/liveme-api.svg?style=flat-square)
 ![node-version](https://img.shields.io/node/v/liveme-api.svg?style=flat-square)
 
 ## Installation
