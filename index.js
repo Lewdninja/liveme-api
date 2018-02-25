@@ -13,16 +13,16 @@ const axios = require('axios');
 /*
 	Constants
 */
-const LM_GETUSERINFO = 'http://live.ksmobile.net/user/getinfo',
-    LM_GETVIDEOINFO = 'http://live.ksmobile.net/live/queryinfo',
-    LM_GETREPLAYVIDEOS = 'http://live.ksmobile.net/live/getreplayvideos',
-    LM_KEYWORDSEARCH = 'http://live.ksmobile.net/search/searchkeyword',
+const LM_GETUSERINFO = 'https://live.ksmobile.net/user/getinfo',
+    LM_GETVIDEOINFO = 'https://live.ksmobile.net/live/queryinfo',
+    LM_GETREPLAYVIDEOS = 'https://live.ksmobile.net/live/getreplayvideos',
+    LM_KEYWORDSEARCH = 'https://live.ksmobile.net/search/searchkeyword',
     LM_GETLIVEUSERS = 'https://live.ksmobile.net/live/newmaininfo',
-    LM_GETFANS = 'http://live.ksmobile.net/follow/getfollowerlistship',
-    LM_GETFOLLOWING = 'http://live.ksmobile.net/follow/getfollowinglistship',
-    LM_GETTRENDINGHASHTAGS = 'http://live.ksmobile.net/search/getTags',
-    LM_GETLIVEGIRLS = 'http://live.ksmobile.net/live/girls',
-    LM_GETLIVEBOYS = 'http://live.ksmobile.net/live/boys';
+    LM_GETFANS = 'https://live.ksmobile.net/follow/getfollowerlistship',
+    LM_GETFOLLOWING = 'https://live.ksmobile.net/follow/getfollowinglistship',
+    LM_GETTRENDINGHASHTAGS = 'https://live.ksmobile.net/search/getTags',
+    LM_GETLIVEGIRLS = 'https://live.ksmobile.net/live/girls',
+    LM_GETLIVEBOYS = 'https://live.ksmobile.net/live/boys';
 
 /*
 	Local Functions
@@ -131,6 +131,16 @@ module.exports = {
 		Returns: An array of message entries
 	*/
     getChatHistoryForVideo(url) {
+        return axios.get(url)
+            .then(response => {
+                return response;
+            });
+    },
+
+    /*
+        same as above, just worded more correctly
+    */
+    getCommentHistoryForReplay(url) {
         return axios.get(url)
             .then(response => {
                 return response;
