@@ -8,29 +8,32 @@
 	                                            v2.0.0     	
 */
 
-const axios = require('axios');
+const   axios = require('axios'), crypto = require('crypto');
 
 /*
 	Constants
 */
-const LM_GETUSERINFO = 'https://live.ksmobile.net/user/getinfo',
-    LM_GETVIDEOINFO = 'https://live.ksmobile.net/live/queryinfo',
-    LM_GETREPLAYVIDEOS = 'https://live.ksmobile.net/live/getreplayvideos',
-    LM_KEYWORDSEARCH = 'https://live.ksmobile.net/search/searchkeyword',
-    LM_GETLIVEUSERS = 'https://live.ksmobile.net/live/newmaininfo',
-    LM_GETFANS = 'https://live.ksmobile.net/follow/getfollowerlistship',
-    LM_GETFOLLOWING = 'https://live.ksmobile.net/follow/getfollowinglistship',
-    LM_GETTRENDINGHASHTAGS = 'https://live.ksmobile.net/search/getTags',
-    LM_GETLIVEGIRLS = 'https://live.ksmobile.net/live/girls',
-    LM_GETLIVEBOYS = 'https://live.ksmobile.net/live/boys';
+const   LM_GETACCESSTOKEN = 'https://live.ksmobile.net/channel/signin',
+        LM_GETCHANNELLOGIN = 'https://live.ksmobile.net/channel/login',
+        LM_GETUSERINFO = 'https://live.ksmobile.net/user/getinfo',
+        LM_GETVIDEOINFO = 'https://live.ksmobile.net/live/queryinfo',
+        LM_GETREPLAYVIDEOS = 'https://live.ksmobile.net/live/getreplayvideos',
+        LM_KEYWORDSEARCH = 'https://live.ksmobile.net/search/searchkeyword',
+        LM_GETLIVEUSERS = 'https://live.ksmobile.net/live/newmaininfo',
+        LM_GETFANS = 'https://live.ksmobile.net/follow/getfollowerlistship',
+        LM_GETFOLLOWING = 'https://live.ksmobile.net/follow/getfollowinglistship',
+        LM_GETTRENDINGHASHTAGS = 'https://live.ksmobile.net/search/getTags',
+        LM_GETLIVEGIRLS = 'https://live.ksmobile.net/live/girls',
+        LM_GETLIVEBOYS = 'https://live.ksmobile.net/live/boys';
 
 /*
 	Local Functions
 */
 
 function httpGet(url, params = {}) {
-    axios.defaults.headers.common['d'] = '';
-    return axios.get(url, params)
+    var dt = new Date();
+    axios.defaults.headers.common['d'] = Math.round(dt.getTime() / 1000);
+    return axios.post(url, params)
         .then(response => {
             if (response.status == 200) {
                 return response.data;
@@ -44,6 +47,63 @@ function httpGet(url, params = {}) {
 	Exported Functions
 */
 module.exports = {
+
+    /*
+        email: string
+        password: string
+
+        Returns: access token
+    */
+    getAccessToken: function(email, password) {
+        return new Promise((resolve, reject) => {
+            if (typeof email == 'undefined' || email == null) {
+                return reject('Must pass an email address to getAccessToken(email, password)');
+            }
+            if (typeof password == 'undefined' || password == null) {
+                return reject('Must pass a password to getAccessToken(email, password)');
+            }
+
+            return resolve();
+        }).then(()=>{
+            var passmd5 = crypto.createHash('md5').update(password).digest("hex");
+            return httpGet(`${LM_GETACCESSTOKEN}?email=${email}&password=${passmd5}`);
+        }).then(data => {
+            if (data.status == '200') {
+                return data.data.access_token;
+            } else {
+                return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
+            }
+            
+        });
+    },
+
+
+
+    /*
+        access_token: string
+
+        Returns: Promise of a User object
+    */
+    getChannelLogin: function(access_token) {
+        return new Promise((resolve, reject) => {
+            if (typeof access_token == 'undefined' || access_token == null) {
+                return reject('Must pass an access token to getChannelLogin(access_token)');
+            }
+            return resolve();
+        }).then(()=>{
+            var uuid = createUUID();
+            return httpGet(`${LM_GETCHANNELLOGIN}?access_token=${access_token}&thirdchannel=6&reg_type=108&androidid=~{uuid}&countrycode=`);
+        }).then(data => {
+            if (data.status == '200') {
+                return data.data.user;
+            } else {
+                return Promise.reject(`Error: ${data.status} Message: ${data.msg}`);
+            }
+            
+        });
+    },
+
+
 
 	/*
 		uid: string
@@ -363,3 +423,16 @@ module.exports = {
         });
     }
 };
+
+
+
+function createUUID(t) {
+    var e, n, o = [], a = "0123456789abcdef";
+    for (e = 0; e < 36; e++)
+        o[e] = a.substr(Math.floor(16 * Math.random()), 1);
+    return o[14] = "4",
+    o[19] = a.substr(3 & o[19] | 8, 1),
+    t ? n = o.join("").substr(0, 32) : (o[8] = o[13] = o[18] = o[23] = "-",
+    n = o.join("")),
+    n
+}
