@@ -8,6 +8,25 @@ description: This is the full API currently exposed by liveme-api node module.
 
 **This document is subject to periodic updates by the contributors as commands are added or adjusted.**
 
+### getAccessToken
+
+**Syntax:** `getAccessToken(email, password)`
+
+**Parameters:**
+*email* - The email address of the login account
+*password* - The password of the login account
+
+**Returns:** Access token needed for secondary login
+
+### getChannelLogin
+
+**Syntax:** `getChannelLogin(access_token)`
+
+**Parameters:**
+*access_token* - The access token received from the getAccessToken function
+
+**Returns:** Object containing user information regarding the logged in account.
+
 ### getUserInfo
 
 **Syntax:** `getUserInfo(userid)`
