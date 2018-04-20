@@ -35,12 +35,14 @@ class LiveMe {
     }
 
     setAuthDetails(email, password) {
-        if ( ! params.email || ! params.password) {
+        if ( ! email || ! password) {
             throw new Error('You need to provide your Live.me email and password.')
         }
 
         this.email = email
-        this.password = Buffer.from(params.password).toString('base64')
+        this.password = Buffer.from(password).toString('base64')
+
+        return this.getAccessTokens()
     }
 
     fetch(method, params = {}) {
@@ -61,7 +63,7 @@ class LiveMe {
     }
 
     getAccessTokens() {
-        if ( ! params.email || ! params.password) {
+        if ( ! this.email || ! this.password) {
             throw new Error('You need to provide your Live.me email and password.')
         }
 
