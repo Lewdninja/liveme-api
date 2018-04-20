@@ -27,18 +27,21 @@ class LiveMe {
         // Login details
         this.email = params.email
         this.password = Buffer.from(params.password).toString('base64')
+        // Userdata
+        this.user = null
         // Tokens
         this.tuid = null
         this.token = null
         this.accessToken = null
         this.androidid = createUUID()
+        this.thirdchannel = 6
 
     }
 
     fetch(method, params = {}) {
         return request(Object.assign({
             method: 'POST',
-            url: URL[method],
+            url: URL[method] || method,
             headers: {
                 d: Math.round(new Date().getTime() / 1000)
             },
@@ -47,11 +50,12 @@ class LiveMe {
                 if (body.status != 200) {
                     throw new Error('Request failed.')
                 }
+                return body.data
             }
         }, params))
     }
 
-    getAccessToken() {
+    getAccessTokens() {
         return this.fetch('accessToken', {
             formData: {
                 name: this.email,
@@ -60,11 +64,89 @@ class LiveMe {
             }
         })
         .then(json => {
-            // Set tokens
+            // Set access token
             this.accessToken = json.access_token
-            // Return data
-            return json.data
+            // Pass token to login
+            return json.access_token
         })
+        .then(accessToken => {
+            // Login
+            return this.fetch('channelLogin', {
+                formData: {
+                    access_token: accessToken,
+                    thirdchannel: this.thirdchannel,
+                    reg_type: 108,
+                    androidid: this.androidid,
+                    countrycode: ''
+                }
+            })
+        })
+        .then(json => {
+            this.user = json.user
+            this.tuid = json.user.uid
+            this.token = json.token
+            return json
+        })
+    }
+
+    getUserInfo(userid) {
+        if ( ! userid) {
+            return new Error('Invalid userid.')
+        }
+
+        return this.fetch('userInfo', {
+            formData: {
+                userid
+            }
+        })
+        .then(json => {
+            return json.user
+        })
+    }
+
+    getVideoInfo(videoid) {
+        if ( ! videoid) {
+            return new Error('Invalid videoid.')
+        }
+
+        return this.fetch('videoInfo', {
+            formData: {
+                userid: 0,
+                videoid
+            }
+        })
+        .then(json => {
+            return json.video_info
+        })
+    }
+
+    getUserReplays(userid, page_index = 1, page_size = 10) {
+        if ( ! userid) {
+            return new Error('Invalid userid.')
+        }
+
+        if ( ! this.user) {
+            return this.getAccessTokens().then(() => this.getUserReplays(userid, page_index, page_size))
+        }
+
+        return this.fetch('replayVideos', {
+            formData: {
+                userid,
+                page_index,
+                page_size,
+                tuid: this.tuid,
+                token: this.token,
+                androidid: this.androidid,
+                thirdchannel: this.thirdchannel
+            }
+        })
+        .then(json => {
+            return json.video_info
+        })
+    }
+
+    getChatHistoryForVideo(url) {
+        return request(url)
     }
 }
 
