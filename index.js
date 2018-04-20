@@ -153,7 +153,7 @@ class LiveMe {
         return request(url)
     }
 
-    performSearch(query = '', type, pagesize = 10, page = 1, countryCode = '') {
+    performSearch(query = '', page = 1, pagesize = 10, type, countryCode = '') {
         if ([1, 2].indexOf(type) === -1) {
             return new Error('Type must be 1 or 2.')
         }
@@ -162,7 +162,7 @@ class LiveMe {
                keyword: encodeURIComponent(query),
                type,
                pagesize,
-               ppage,
+               page,
                countryCode
             }
         })
