@@ -2,18 +2,18 @@ const request = require('request-promise-native')
 
 const API = 'https://live.ksmobile.net'
 const URL = {
-    getAccessToken: `${API}/channel/signin`,
-    getChannelLogin: `${API}/channel/login`,
-    getUserInfo: `${API}/user/getinfo`,
-    getVideoInfo: `${API}/live/queryinfo`,
-    getReplayVideos: `${API}/live/getreplayvideos`,
+    accessToken: `${API}/channel/signin`,
+    channelLogin: `${API}/channel/login`,
+    userInfo: `${API}/user/getinfo`,
+    videoInfo: `${API}/live/queryinfo`,
+    replayVideos: `${API}/live/getreplayvideos`,
     keywordSearch: `${API}/search/searchkeyword`,
-    getLiveUsers: `${API}/live/newmaininfo`,
-    getFans: `${API}/follow/getfollowerlistship`,
-    getFollowing: `${API}/follow/getfollowinglistship`,
-    getTrendingHashtags: `${API}/search/getTags`,
-    getLiveBoys: `${API}/live/boys`,
-    getLiveGirls: `${API}/live/girls`,
+    liveUsers: `${API}/live/newmaininfo`,
+    fans: `${API}/follow/getfollowerlistship`,
+    following: `${API}/follow/getfollowinglistship`,
+    trendingHashtags: `${API}/search/getTags`,
+    liveBoys: `${API}/live/boys`,
+    liveGirls: `${API}/live/girls`,
 }
 
 class LiveMe {
@@ -26,26 +26,45 @@ class LiveMe {
 
         // Login details
         this.email = params.email
-        this.password = params.password
+        this.password = Buffer.from(params.password).toString('base64')
         // Tokens
         this.tuid = null
         this.token = null
+        this.accessToken = null
         this.androidid = createUUID()
 
     }
 
-    fetch(url, params = {}) {
-        return request({
+    fetch(method, params = {}) {
+        return request(Object.assign({
             method: 'POST',
+            url: URL[method],
             headers: {
                 d: Math.round(new Date().getTime() / 1000)
             },
-            ...params
-        })
+            json: true,
+            transform: function (body) {
+                if (body.status != 200) {
+                    throw new Error('Request failed.')
+                }
+            }
+        }, params))
     }
 
-    getAccessToken(params = {}) {
-
+    getAccessToken() {
+        return this.fetch('accessToken', {
+            formData: {
+                name: this.email,
+                password: this.password,
+                sr: 1
+            }
+        })
+        .then(json => {
+            // Set tokens
+            this.accessToken = json.access_token
+            // Return data
+            return json.data
+        })
     }
 }
 

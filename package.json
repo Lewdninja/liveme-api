@@ -28,7 +28,6 @@
   },
   "homepage": "https://github.com/thecoder75/liveme-api#readme",
   "dependencies": {
-    "axios": "^0.17.1",
-    "crypto": "^1.0.1"
+    "request-promise-native": "^1.0.5"
   }
 }
