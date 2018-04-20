@@ -154,15 +154,24 @@ module.exports = {
     },
 
 	/*
+        token: string (use getAccessToken to obtain)
+        tuid: string (use getChannelLogin to obtain)
 		uid: string
 		page: number (default 1)
 		count: number (default 10)
 		Returns: Promise of an array of Video objects
 	*/
-    getUserReplays: function (uid, page, count) {
+    getUserReplays: function (token, tuid, uid, page, count) {
         return new Promise((resolve, reject) => {
+            if (typeof token == 'undefined' || token == null) {
+                return reject('Must pass a valid token parameter to getUserReplays(token, tuid, uid, page, count).');
+            }
+            if (typeof tuid == 'undefined' || tuid == null) {
+                return reject('Must pass a valid tuid parameter to getUserReplays(token, tuid, uid, page, count).');
+            }
+
             if (typeof uid == 'undefined' || uid == null) {
-                return reject('Must pass a valid UID parameter to getUserReplays(uid, page, count).');
+                return reject('Must pass a valid UID parameter to getUserReplays(token, tuid, uid, page, count).');
             }
 
             if (typeof page == 'undefined' || page == null) {
@@ -175,7 +184,7 @@ module.exports = {
 
             return resolve();
         }).then(() => {
-            return httpGet(`${LM_GETREPLAYVIDEOS}?userid=${uid}&page_size=${count}&page_index=${page}`);
+            return httpGet(`${LM_GETREPLAYVIDEOS}?userid=${uid}&toekn=${token}&tuid=${tuid}&page_size=${count}&page_index=${page}`);
         }).then(data => {
             if (data.status == 200) {
                 return data.data.video_info;
