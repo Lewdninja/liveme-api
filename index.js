@@ -148,6 +148,55 @@ class LiveMe {
     getChatHistoryForVideo(url) {
         return request(url)
     }
+
+    getCommentHistoryForReplay(url) {
+        return request(url)
+    }
+
+    performSearch(query = '', type, pagesize = 10, page = 1, countryCode = '') {
+        if ([1, 2].indexOf(type) === -1) {
+            return new Error('Type must be 1 or 2.')
+        }
+        return this.fetch('keywordSearch', {
+            formData: {
+               keyword: encodeURIComponent(query),
+               type,
+               pagesize,
+               ppage,
+               countryCode
+            }
+        })
+        .then(json => {
+            return json.data_info
+        })
+    }
+
+    getLive(page_index = 1, page_size = 10, countryCode = '') {
+        return this.fetch('liveUsers', {
+            formData: {
+                page_index,
+                page_size,
+                countryCode
+            }
+        })
+            .then(json => {
+                return json.video_info
+            })
+    }
+
+    getFans(access_token, page_index = 1, page_size = 10) {
+        if ( ! access_token) {
+            return new Error('Invalid access_token (userid).')
+        }
+
+        return this.fetch('fans', {
+            formData: {
+                access_token,
+                page_index,
+                page_size
+            }
+        })
+    }
 }
 
 module.exports = LiveMe
