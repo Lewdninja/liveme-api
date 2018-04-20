@@ -197,6 +197,44 @@ class LiveMe {
             }
         })
     }
+
+    getFollowing(access_token, page_index = 1, page_size = 10) {
+        if ( ! access_token) {
+            return new Error('Invalid access_token (userid).')
+        }
+
+        return this.fetch('following', {
+            formData: {
+                access_token,
+                page_index,
+                page_size
+            }
+        })
+    }
+
+    getTrendingHashtags() {
+        return this.fetch('trendingHashtags')
+    }
+
+    getLiveGirls(page_size = 10, page = 1, countryCode = '') {
+        return this.fetch('liveGirls', {
+            formData: {
+                page,
+                page_size,
+                countryCode
+            }
+        })
+    }
+
+    getLiveBoys(page_size = 10, page = 1, countryCode = '') {
+        return this.fetch('liveBoys', {
+            formData: {
+                page,
+                page_size,
+                countryCode
+            }
+        })
+    }
 }
 
 module.exports = LiveMe
