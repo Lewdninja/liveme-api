@@ -20,13 +20,9 @@ class LiveMe {
 
     constructor(params = {}) {
 
-        if ( ! params.email || ! params.password) {
-            throw new Error('You need to provide your Live.me email and password.')
-        }
-
         // Login details
-        this.email = params.email
-        this.password = Buffer.from(params.password).toString('base64')
+        this.email = params.email || null
+        this.password = params.password ? Buffer.from(params.password).toString('base64') : null
         // Userdata
         this.user = null
         // Tokens
@@ -36,6 +32,15 @@ class LiveMe {
         this.androidid = createUUID()
         this.thirdchannel = 6
 
+    }
+
+    setAuthDetails(email, password) {
+        if ( ! params.email || ! params.password) {
+            throw new Error('You need to provide your Live.me email and password.')
+        }
+
+        this.email = email
+        this.password = Buffer.from(params.password).toString('base64')
     }
 
     fetch(method, params = {}) {
@@ -56,6 +61,10 @@ class LiveMe {
     }
 
     getAccessTokens() {
+        if ( ! params.email || ! params.password) {
+            throw new Error('You need to provide your Live.me email and password.')
+        }
+
         return this.fetch('accessToken', {
             formData: {
                 name: this.email,
