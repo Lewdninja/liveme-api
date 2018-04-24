@@ -32,13 +32,22 @@ class LiveMe {
         this.androidid = createUUID()
         this.thirdchannel = 6
 
+        if (this.email && this.password) {
+            this.getAccessTokens()
+                .then(() => {
+                    console.log('Authenticated with Live.me servers.')
+                })
+                .catch(() => {
+                    console.log('Authentication failed.')
+                })
+        }
+
     }
 
     setAuthDetails(email, password) {
         if ( ! email || ! password) {
-            throw new Error('You need to provide your Live.me email and password.')
+            return Promise.reject('You need to provide your Live.me email and password.')
         }
-
         this.email = email
         this.password = Buffer.from(password).toString('base64')
 
@@ -64,7 +73,7 @@ class LiveMe {
 
     getAccessTokens() {
         if ( ! this.email || ! this.password) {
-            throw new Error('You need to provide your Live.me email and password.')
+            return Promise.reject('You need to provide your Live.me email and password.')
         }
 
         return this.fetch('accessToken', {
@@ -102,7 +111,7 @@ class LiveMe {
 
     getUserInfo(userid) {
         if ( ! userid) {
-            return new Error('Invalid userid.')
+            return Promise.reject('Invalid userid.')
         }
 
         return this.fetch('userInfo', {
@@ -117,7 +126,7 @@ class LiveMe {
 
     getVideoInfo(videoid) {
         if ( ! videoid) {
-            return new Error('Invalid videoid.')
+            return Promise.reject('Invalid videoid.')
         }
 
         return this.fetch('videoInfo', {
@@ -133,11 +142,11 @@ class LiveMe {
 
     getUserReplays(userid, page_index = 1, page_size = 10) {
         if ( ! userid) {
-            return new Error('Invalid userid.')
+            return Promise.reject('Invalid userid.')
         }
 
         if ( ! this.user) {
-            return this.getAccessTokens().then(() => this.getUserReplays(userid, page_index, page_size))
+            return Promise.reject('Not authenticated with Live.me!')
         }
 
         return this.fetch('replayVideos', {
@@ -166,7 +175,7 @@ class LiveMe {
 
     performSearch(query = '', page = 1, pagesize = 10, type, countryCode = '') {
         if ([1, 2].indexOf(type) === -1) {
-            return new Error('Type must be 1 or 2.')
+            return Promise.reject('Type must be 1 or 2.')
         }
         return this.fetch('keywordSearch', {
             formData: {
@@ -197,7 +206,7 @@ class LiveMe {
 
     getFans(access_token, page_index = 1, page_size = 10) {
         if ( ! access_token) {
-            return new Error('Invalid access_token (userid).')
+            return Promise.reject('Invalid access_token (userid).')
         }
 
         return this.fetch('fans', {
@@ -211,7 +220,7 @@ class LiveMe {
 
     getFollowing(access_token, page_index = 1, page_size = 10) {
         if ( ! access_token) {
-            return new Error('Invalid access_token (userid).')
+            return Promise.reject('Invalid access_token (userid).')
         }
 
         return this.fetch('following', {
