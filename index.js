@@ -193,8 +193,7 @@ class LiveMe {
                 page_size,
                 tuid: this.tuid,
                 token: this.token,
-                androidid: this.androidid,
-                thirdchannel: this.thirdchannel
+                sso_token: this.ssoToken
             }
         })
         .then(json => {
