@@ -1,9 +1,14 @@
 const request = require('request-promise-native')
 
 const API = 'https://live.ksmobile.net'
+const IAG = 'https://iag.ksmobile.net'
 const URL = {
+    login: `${IAG}/1/cgi/login`,
+    appLogin: `${API}/sns/appLoginCM`,
+
     accessToken: `${API}/channel/signin`,
     channelLogin: `${API}/channel/login`,
+
     userInfo: `${API}/user/getinfo`,
     videoInfo: `${API}/live/queryinfo`,
     replayVideos: `${API}/live/getreplayvideos`,
@@ -22,13 +27,15 @@ class LiveMe {
 
         // Login details
         this.email = params.email || null
-        this.password = params.password ? Buffer.from(params.password).toString('base64') : null
+        this.password = params.password || null
         // Userdata
         this.user = null
         // Tokens
         this.tuid = null
         this.token = null
         this.accessToken = null
+        this.sid = null
+        this.ssoToken = null
         this.androidid = createUUID()
         this.thirdchannel = 6
 
@@ -37,7 +44,7 @@ class LiveMe {
                 .then(() => {
                     console.log('Authenticated with Live.me servers.')
                 })
-                .catch(() => {
+                .catch(err => {
                     console.log('Authentication failed.')
                 })
         }
@@ -49,21 +56,30 @@ class LiveMe {
             return Promise.reject('You need to provide your Live.me email and password.')
         }
         this.email = email
-        this.password = Buffer.from(password).toString('base64')
+        this.password = password
 
         return this.getAccessTokens()
     }
 
-    fetch(method, params = {}) {
+    fetch(method, params = {}, qs = {}) {
+        const url = URL[method] || method
         return request(Object.assign({
             method: 'POST',
-            url: URL[method] || method,
+            url,
             headers: {
                 d: Math.round(new Date().getTime() / 1000)
             },
+            qs: Object.assign({
+                vercode: 38551987,
+                api: 23,
+                ver: '3.8.55'
+            }, qs),
             json: true,
             transform: function (body) {
-                if (body.status != 200) {
+                if (typeof body === 'string') body = JSON.parse(body)
+                if (body.status === undefined) body.status = 200
+                if (body.ret === undefined) body.ret = 1
+                if (body.status != 200 || body.ret != 1) {
                     throw new Error('Request failed.')
                 }
                 return body.data
@@ -76,34 +92,49 @@ class LiveMe {
             return Promise.reject('You need to provide your Live.me email and password.')
         }
 
-        return this.fetch('accessToken', {
-            formData: {
-                name: this.email,
-                password: this.password,
-                sr: 1
+        return request({
+            method: 'POST',
+            url: URL.login,
+            headers: {
+                d: Math.round(new Date().getTime() / 1000),
+                sig: 'fp1bO-aJwHKoRB0jnsW4hQ6nor8',
+                sid: '9469C0239535A9E579F8D20E5A4D5C3C',
+                appid: '135301',
+                ver: '3.8.55',
+                'content-type': 'multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f',
+                'user-agent': 'FBAndroidSDK.0.0.1'
+            },
+            body: `--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="cmversion"\r\n\r\n38551987\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="code"\r\n\r\n\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="name"\r\n\r\n${this.email}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="extra"\r\n\r\nuserinfo\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="password"\r\n\r\n${this.password}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f`,
+            transform: function (body) {
+                if (typeof body === 'string') body = JSON.parse(body)
+                if (body.status === undefined) body.status = 200
+                if (body.ret === undefined) body.ret = 1
+                if (body.status != 200 || body.ret != 1) {
+                    throw new Error('Request failed.')
+                }
+                return body.data
             }
         })
         .then(json => {
-            // Set access token
-            this.accessToken = json.access_token
+            this.sid = json.sid
+            // Set SSO token
+            this.ssoToken = json.sso_token
             // Pass token to login
-            return json.access_token
+            return json.sso_token
         })
-        .then(accessToken => {
+        .then(ssoToken => {
             // Login
-            return this.fetch('channelLogin', {
-                formData: {
-                    access_token: accessToken,
-                    thirdchannel: this.thirdchannel,
-                    reg_type: 108,
-                    androidid: this.androidid,
-                    countrycode: ''
+            return this.fetch('appLogin', {
+                form: {
+                    'data[email]': this.email,
+                    'data[sso_token]': ssoToken,
+                    sso_token: ssoToken
                 }
             })
         })
         .then(json => {
             this.user = json.user
-            this.tuid = json.user.uid
+            this.tuid = json.user.user_info.uid
             this.token = json.token
             return json
         })
@@ -129,10 +160,16 @@ class LiveMe {
             return Promise.reject('Invalid videoid.')
         }
 
+        if ( ! this.user) {
+            return Promise.reject('Not authenticated with Live.me!')
+        }
+
         return this.fetch('videoInfo', {
             formData: {
+                videoid,
                 userid: 0,
-                videoid
+                tuid: this.tuid,
+                token: this.token
             }
         })
         .then(json => {
