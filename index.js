@@ -3,6 +3,7 @@ const request = require('request-promise-native')
 const API = 'https://live.ksmobile.net'
 const IAG = 'https://iag.ksmobile.net'
 const URL = {
+    exists: `${IAG}/1/cgi/is_exist`,
     login: `${IAG}/1/cgi/login`,
     appLogin: `${API}/sns/appLoginCM`,
 
@@ -45,7 +46,7 @@ class LiveMe {
                     console.log('Authenticated with Live.me servers.')
                 })
                 .catch(err => {
-                    console.log('Authentication failed.')
+                    console.log('Authentication failed. - ' + err)
                 })
         }
 
@@ -70,11 +71,10 @@ class LiveMe {
                 d: Math.round(new Date().getTime() / 1000)
             },
             qs: Object.assign({
-                vercode: 38551987,
-                api: 23,
-                ver: '3.8.55'
+                vercode: '38671037',
+                api: '23',
+                ver: '3.8.67'
             }, qs),
-            json: true,
             transform: function (body) {
                 if (typeof body === 'string') body = JSON.parse(body)
                 if (body.status === undefined) body.status = 200
@@ -97,23 +97,46 @@ class LiveMe {
             url: URL.login,
             headers: {
                 d: Math.round(new Date().getTime() / 1000),
-                sig: 'fp1bO-aJwHKoRB0jnsW4hQ6nor8',
-                sid: '9469C0239535A9E579F8D20E5A4D5C3C',
+                sig: 'NACqiiY5X5J-qNCE8Iy80BJbx8U',
+                sid: '6F77A61D34F218A8BC3ACF4A22B4D048',
                 appid: '135301',
-                ver: '3.8.55',
+                ver: '3.8.67',
                 'content-type': 'multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f',
-                'user-agent': 'FBAndroidSDK.0.0.1'
+                'user-agent': 'FBAndroidSDK.0.0.1',
+                host: 'iag.ksmobile.net'
             },
-            body: `--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="cmversion"\r\n\r\n38551987\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="code"\r\n\r\n\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="name"\r\n\r\n${this.email}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="extra"\r\n\r\nuserinfo\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="password"\r\n\r\n${this.password}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f`,
+            body: `--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="cmversion"\r\n\r\n38671037\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="name"\r\n\r\n${this.email}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f`,
             transform: function (body) {
                 if (typeof body === 'string') body = JSON.parse(body)
-                if (body.status === undefined) body.status = 200
-                if (body.ret === undefined) body.ret = 1
-                if (body.status != 200 || body.ret != 1) {
-                    throw new Error('Request failed.')
-                }
-                return body.data
+                return body
             }
+        })
+        .then(json => {
+            // console.log('IS_EXIST RESPONSE: ', json)
+            return request({
+                method: 'POST',
+                url: URL.login,
+                headers: {
+                    d: Math.round(new Date().getTime() / 1000),
+                    sig: 'NACqiiY5X5J-qNCE8Iy80BJbx8U',
+                    sid: '6F77A61D34F218A8BC3ACF4A22B4D048',
+                    appid: '135301',
+                    ver: '3.8.67',
+                    'content-type': 'multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f',
+                    'user-agent': 'FBAndroidSDK.0.0.1',
+                    host: 'iag.ksmobile.net'
+                },
+                body: `--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="cmversion"\r\n\r\n38671037\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="code"\r\n\r\n\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="name"\r\n\r\n${this.email}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="extra"\r\n\r\nuserinfo\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="password"\r\n\r\n${this.password}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f`,
+                transform: function (body) {
+                    if (typeof body === 'string') body = JSON.parse(body)
+                    if (body.status === undefined) body.status = 200
+                    if (body.ret === undefined) body.ret = 1
+                    if (body.status != 200 || body.ret != 1) {
+                        throw new Error('Request failed.')
+                    }
+                    return body.data
+                }
+            })
         })
         .then(json => {
             this.sid = json.sid
@@ -125,11 +148,34 @@ class LiveMe {
         .then(ssoToken => {
             // Login
             return this.fetch('appLogin', {
+                headers: {
+                    'Accept': '*/*',
+                    'User-Agent': 'Dalvik/1.6.0 (Linux; U; Android 4.4.2; SAMSUNG-SM-N900A Build/KOT49H)',
+                    'Cache-Control': 'no-cache',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
                 form: {
                     'data[email]': this.email,
                     'data[sso_token]': ssoToken,
-                    sso_token: ssoToken
+                    sso_token: ssoToken,
+                    // placeholder values
+                    'data[uid]': '',
+                    'data[face]': '',
+                    'data[big_face]': '',
+                    'data[from]': 0,
+                    'data[sex]': -1,
+                    'data[is_verified]': 0,
+                    'data[birthday]': '',
+                    'data[mobile]': '',
+                    'data[smid]': '',
+                    token: '',
+                    version: 1,
+                    netst: 1,
+                    status: 0
                 }
+            }, {
+                os: 'android',
+                model: 'SAMSUNG-SM-N900A'
             })
         })
         .then(json => {
