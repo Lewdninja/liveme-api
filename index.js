@@ -68,6 +68,9 @@ class LiveMe {
             method: 'POST',
             url,
             headers: {
+                'Accept': '*/*',
+                'User-Agent': 'Dalvik/1.6.0 (Linux; U; Android 4.4.2; SAMSUNG-SM-N900A Build/KOT49H)',
+                'Cache-Control': 'no-cache',
                 d: Math.round(new Date().getTime() / 1000)
             },
             qs: Object.assign({
@@ -148,12 +151,6 @@ class LiveMe {
         .then(ssoToken => {
             // Login
             return this.fetch('appLogin', {
-                headers: {
-                    'Accept': '*/*',
-                    'User-Agent': 'Dalvik/1.6.0 (Linux; U; Android 4.4.2; SAMSUNG-SM-N900A Build/KOT49H)',
-                    'Cache-Control': 'no-cache',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
                 form: {
                     'data[email]': this.email,
                     'data[sso_token]': ssoToken,
