@@ -1,4 +1,8 @@
+const fs = require('fs')
+const { getAppDataPath } = require('appdata-path')
 const request = require('request-promise-native')
+const crypto = require('crypto')
+const sha256 = x => crypto.createHash('sha256').update(x, 'utf8').digest('hex')
 
 const API = 'https://live.ksmobile.net'
 const IAG = 'https://iag.ksmobile.net'
@@ -41,15 +45,62 @@ class LiveMe {
         this.thirdchannel = 6
 
         if (this.email && this.password) {
-            this.getAccessTokens()
-                .then(() => {
-                    console.log('Authenticated with Live.me servers.')
-                })
-                .catch(err => {
-                    console.log('Authentication failed. - ' + err)
-                })
+            const authData = this.getAuthFile()
+            if (!authData) {
+                this.getAccessTokens()
+                    .then(() => {
+                        console.log('Authenticated with Live.me servers.')
+                    })
+                    .catch(err => {
+                        try {
+                            const json = JSON.parse(err.response.body)
+                            console.log(json)
+                        } catch (e) {
+                            console.log(err.message)
+                        }
+                    })
+            } else {
+                Object.assign(this, authData)
+                console.log('Authenticated using cached user details.')
+            }
         }
 
+        // Keep updating access tokens.
+        setInterval(() => {
+            this.getAccessTokens()
+                .catch(err => {
+                    try {
+                        const json = JSON.parse(err.response.body)
+                        console.log(json)
+                    } catch (e) {
+                        console.log(err.message)
+                    }
+                })
+        }, 1.5 * 60 * 60 * 1000)
+    }
+
+    saveAuthToFile() {
+        const path = `${getAppDataPath()}/liveme-api`
+        const name = `${sha256(this.email)}.json`
+        const data = {
+            ...this,
+            updated: Date.now()
+        }
+        if (!fs.existsSync(path)) fs.mkdirSync(path)
+        fs.writeFileSync(`${path}/${name}`, JSON.stringify(data))
+    }
+
+    getAuthFile() {
+        const path = `${getAppDataPath()}/liveme-api/${sha256(this.email)}.json`
+        try {
+            const data = JSON.parse(fs.readFileSync(path))
+            // No data or invalid
+            if (!data) return false
+            // If auth data is not outdated, return it
+            if (Date.now() - data.updated < 60 * 60 * 1000) return data
+            // Data outdated
+            return false
+        } catch (e) { return false }
     }
 
     setAuthDetails(email, password) {
@@ -83,7 +134,7 @@ class LiveMe {
                 if (body.status === undefined) body.status = 200
                 if (body.ret === undefined) body.ret = 1
                 if (body.status != 200 || body.ret != 1) {
-                    throw new Error('Request failed.')
+                    throw new Error(body)
                 }
                 return body.data
             }
@@ -97,7 +148,7 @@ class LiveMe {
 
         return request({
             method: 'POST',
-            url: URL.login,
+            url: URL.exists,
             headers: {
                 d: Math.round(new Date().getTime() / 1000),
                 sig: 'NACqiiY5X5J-qNCE8Iy80BJbx8U',
@@ -115,7 +166,7 @@ class LiveMe {
             }
         })
         .then(json => {
-            // console.log('IS_EXIST RESPONSE: ', json)
+            console.log('IS_EXIST RESPONSE: ', json)
             return request({
                 method: 'POST',
                 url: URL.login,
@@ -135,7 +186,7 @@ class LiveMe {
                     if (body.status === undefined) body.status = 200
                     if (body.ret === undefined) body.ret = 1
                     if (body.status != 200 || body.ret != 1) {
-                        throw new Error('Request failed.')
+                        throw new Error(body)
                     }
                     return body.data
                 }
@@ -179,7 +230,35 @@ class LiveMe {
             this.user = json.user
             this.tuid = json.user.user_info.uid
             this.token = json.token
+            
+            this.saveAuthToFile()
+
             return json
+        })
+        .catch(err => {
+            const res = err.response
+            if (res && res.body) {
+                const json = JSON.parse(res.body)
+                if (json.data.captcha) {
+                    console.log('RECEIVED_CAPTCHA, Retrying...')
+                    return this.sendCaptchaRequest(json.data.captcha)
+                        .then(() => {
+                            return setTimeout(() => this.getAccessTokens(), 5000)
+                        })
+                        .catch(() => {
+                            return Promise.reject(err)
+                        })
+                }
+            }
+            return Promise.reject(err)
+        })
+    }
+
+    sendCaptchaRequest(url) {
+        return request({
+            method: 'GET',
+            url,
+            simple: true
         })
     }
 

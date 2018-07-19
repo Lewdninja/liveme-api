@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/thecoder75/liveme-api#readme",
   "dependencies": {
+    "appdata-path": "^0.1.2",
     "request-promise-native": "^1.0.5"
   }
 }
