@@ -82,10 +82,9 @@ class LiveMe {
     saveAuthToFile() {
         const path = `${getAppDataPath()}/liveme-api`
         const name = `${sha256(this.email)}.json`
-        const data = {
-            ...this,
+        const data = Object.assign(this, {
             updated: Date.now()
-        }
+        })
         if (!fs.existsSync(path)) fs.mkdirSync(path)
         fs.writeFileSync(`${path}/${name}`, JSON.stringify(data))
     }
