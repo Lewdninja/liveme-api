@@ -124,14 +124,14 @@ class LiveMe {
             url,
             headers: {
                 'Accept': '*/*',
-                'User-Agent': 'Dalvik/1.6.0 (Linux; U; Android 4.4.2; SAMSUNG-SM-N900A Build/KOT49H)',
+                'User-Agent': 'Dalvik/1.6.0 (Linux; U; Android 4.4.2; SAMSUNG Build/KOT49H)',
                 'Cache-Control': 'no-cache',
                 d: Math.round(new Date().getTime() / 1000)
             },
             qs: Object.assign({
-                vercode: '38671037',
-                api: '23',
-                ver: '3.8.67'
+                vercode: '39151164',
+                api: '24',
+                ver: '3.9.15'
             }, qs),
             transform: function (body) {
                 if (typeof body === 'string') body = JSON.parse(body)
@@ -157,13 +157,13 @@ class LiveMe {
                 d: Math.round(new Date().getTime() / 1000),
                 sig: 'NACqiiY5X5J-qNCE8Iy80BJbx8U',
                 sid: '6F77A61D34F218A8BC3ACF4A22B4D048',
-                appid: '135301',
-                ver: '3.8.67',
+                appid: 135301,
+                ver: '3.9.15',
                 'content-type': 'multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f',
                 'user-agent': 'FBAndroidSDK.0.0.1',
                 host: 'iag.ksmobile.net'
             },
-            body: `--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="cmversion"\r\n\r\n38671037\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="name"\r\n\r\n${this.email}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f`,
+            body: `--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="cmversion"\r\n\r\n39151164\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="name"\r\n\r\n${this.email}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f`,
             transform: function (body) {
                 if (typeof body === 'string') body = JSON.parse(body)
                 return body
@@ -178,13 +178,13 @@ class LiveMe {
                     d: Math.round(new Date().getTime() / 1000),
                     sig: 'NACqiiY5X5J-qNCE8Iy80BJbx8U',
                     sid: '6F77A61D34F218A8BC3ACF4A22B4D048',
-                    appid: '135301',
-                    ver: '3.8.67',
+                    appid: 135301,
+                    ver: '3.9.15',
                     'content-type': 'multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f',
                     'user-agent': 'FBAndroidSDK.0.0.1',
                     host: 'iag.ksmobile.net'
                 },
-                body: `--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="cmversion"\r\n\r\n38671037\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="code"\r\n\r\n\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="name"\r\n\r\n${this.email}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="extra"\r\n\r\nuserinfo\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="password"\r\n\r\n${this.password}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f`,
+                body: `--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="cmversion"\r\n\r\n39151164\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="code"\r\n\r\n\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="name"\r\n\r\n${this.email}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="extra"\r\n\r\nuserinfo\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="password"\r\n\r\n${this.password}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f`,
                 transform: function (body) {
                     if (typeof body === 'string') body = JSON.parse(body)
                     if (body.status === undefined) body.status = 200
@@ -227,7 +227,7 @@ class LiveMe {
                 }
             }, {
                 os: 'android',
-                model: 'SAMSUNG-SM-N900A'
+                model: 'SAMSUNG'
             })
         })
         .then(json => {
