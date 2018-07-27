@@ -98,12 +98,7 @@ class LiveMe {
         this.email = email
         this.password = password
 
-        const authData = this.getAuthFile()
-        if (!authData) {
-            return this.getAccessTokensWeb()
-        }
-        Object.assign(this, authData)
-        return Promise.resolve(authData)
+        return this.getAccessTokensWeb()
     }
 
     fetch(method, params = {}, qs = {}) {
