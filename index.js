@@ -72,7 +72,7 @@ class LiveMe {
         const data = Object.assign(this, {
             updated: Date.now()
         })
-        if (!fs.existsSync(path)) return
+        if (!fs.existsSync(`${path}/${name}`)) return
         fs.unlinkSync(`${path}/${name}`)
     }
 
@@ -91,14 +91,16 @@ class LiveMe {
         } catch (e) { return false }
     }
 
-    setAuthDetails(email, password) {
+    setAuthDetails(email, password, getTokens = true) {
         if ( ! email || ! password) {
             return Promise.reject('You need to provide your Live.me email and password.')
         }
         this.email = email
         this.password = password
 
-        return this.getAccessTokensWeb()
+        if (getTokens) return this.getAccessTokensWeb()
+
+        return Promise.resolve(true)
     }
 
     fetch(method, params = {}, qs = {}) {
@@ -310,7 +312,9 @@ class LiveMe {
                 videoid,
                 userid: 0,
                 tuid: this.tuid,
-                token: this.token
+                token: this.token,
+                androidid: this.androidid,
+                thirdchannel: this.thirdchannel
             }
         })
         .then(json => {
