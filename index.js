@@ -55,6 +55,7 @@ class LiveMe {
     }
 
     saveAuthToFile() {
+        if (!this.email) return
         const path = `${getAppDataPath()}/liveme-api`
         const name = `${sha256(this.email)}.json`
         const data = Object.assign(this, {
@@ -64,7 +65,19 @@ class LiveMe {
         fs.writeFileSync(`${path}/${name}`, JSON.stringify(data))
     }
 
+    removeAuthFile() {
+        if (!this.email) return
+        const path = `${getAppDataPath()}/liveme-api`
+        const name = `${sha256(this.email)}.json`
+        const data = Object.assign(this, {
+            updated: Date.now()
+        })
+        if (!fs.existsSync(path)) return
+        fs.unlinkSync(`${path}/${name}`)
+    }
+
     getAuthFile() {
+        if (!this.email) return false
         const path = `${getAppDataPath()}/liveme-api/${sha256(this.email)}.json`
         try {
             const data = JSON.parse(fs.readFileSync(path))
