@@ -134,6 +134,8 @@ class LiveMe {
             return Promise.reject('You need to provide your Live.me email and password.')
         }
 
+        this.removeAuthFile()
+
         return request({
             method: 'POST',
             url: URL.login,
@@ -225,6 +227,8 @@ class LiveMe {
         if ( ! this.email || ! this.password) {
             return Promise.reject('You need to provide your Live.me email and password.')
         }
+
+        this.removeAuthFile()
 
         return request({
             url: URL.accessToken,
