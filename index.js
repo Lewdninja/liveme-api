@@ -13,6 +13,7 @@ const URL = {
 
     accessToken: `${API}/channel/signin`,
     channelLogin: `${API}/channel/login`,
+    getCaptcha: `${API}/channel/captcha`,
 
     userInfo: `${API}/user/getinfo`,
     videoInfo: `${API}/live/queryinfo`,
@@ -33,12 +34,12 @@ class LiveMe {
         // Login details
         this.email = params.email || null
         this.password = params.password || null
+        this.captcha = null
         // Userdata
         this.user = null
         // Tokens
         this.tuid = null
         this.token = null
-        this.accessToken = null
         this.sid = null
         this.ssoToken = null
         this.androidid = createUUID()
@@ -46,37 +47,11 @@ class LiveMe {
 
         if (this.email && this.password) {
             const authData = this.getAuthFile()
-            if (!authData) {
-                this.getAccessTokens()
-                    .then(() => {
-                        console.log('Authenticated with Live.me servers.')
-                    })
-                    .catch(err => {
-                        try {
-                            const json = JSON.parse(err.response.body)
-                            console.log(json)
-                        } catch (e) {
-                            console.log(err.message)
-                        }
-                    })
-            } else {
+            if (authData) {
                 Object.assign(this, authData)
                 console.log('Authenticated using cached user details.')
             }
         }
-
-        // Keep updating access tokens.
-        setInterval(() => {
-            this.getAccessTokens()
-                .catch(err => {
-                    try {
-                        const json = JSON.parse(err.response.body)
-                        console.log(json)
-                    } catch (e) {
-                        console.log(err.message)
-                    }
-                })
-        }, 1.5 * 60 * 60 * 1000)
     }
 
     saveAuthToFile() {
@@ -96,9 +71,10 @@ class LiveMe {
             // No data or invalid
             if (!data) return false
             // If auth data is not outdated, return it
-            if (Date.now() - data.updated < 60 * 60 * 1000) return data
+            // if (Date.now() - data.updated < 60 * 60 * 1000) return data
+            return data
             // Data outdated
-            return false
+            // return false
         } catch (e) { return false }
     }
 
@@ -111,7 +87,7 @@ class LiveMe {
 
         const authData = this.getAuthFile()
         if (!authData) {
-            return this.getAccessTokens()
+            return this.getAccessTokensWeb()
         }
         Object.assign(this, authData)
         return Promise.resolve(authData)
@@ -152,7 +128,7 @@ class LiveMe {
 
         return request({
             method: 'POST',
-            url: URL.exists,
+            url: URL.login,
             headers: {
                 d: Math.round(new Date().getTime() / 1000),
                 sig: 'NACqiiY5X5J-qNCE8Iy80BJbx8U',
@@ -163,38 +139,16 @@ class LiveMe {
                 'user-agent': 'FBAndroidSDK.0.0.1',
                 host: 'iag.ksmobile.net'
             },
-            body: `--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="cmversion"\r\n\r\n39151164\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="name"\r\n\r\n${this.email}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f`,
+            body: `--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="cmversion"\r\n\r\n39151164\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="code"\r\n\r\n\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="name"\r\n\r\n${this.email}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="extra"\r\n\r\nuserinfo\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="password"\r\n\r\n${this.password}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f`,
             transform: function (body) {
                 if (typeof body === 'string') body = JSON.parse(body)
-                return body
-            }
-        })
-        .then(json => {
-            console.log('IS_EXIST RESPONSE: ', json)
-            return request({
-                method: 'POST',
-                url: URL.login,
-                headers: {
-                    d: Math.round(new Date().getTime() / 1000),
-                    sig: 'NACqiiY5X5J-qNCE8Iy80BJbx8U',
-                    sid: '6F77A61D34F218A8BC3ACF4A22B4D048',
-                    appid: 135301,
-                    ver: '3.9.15',
-                    'content-type': 'multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f',
-                    'user-agent': 'FBAndroidSDK.0.0.1',
-                    host: 'iag.ksmobile.net'
-                },
-                body: `--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="cmversion"\r\n\r\n39151164\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="code"\r\n\r\n\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="name"\r\n\r\n${this.email}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="extra"\r\n\r\nuserinfo\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f\r\nContent-Disposition: form-data; name="password"\r\n\r\n${this.password}\r\n--3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f`,
-                transform: function (body) {
-                    if (typeof body === 'string') body = JSON.parse(body)
-                    if (body.status === undefined) body.status = 200
-                    if (body.ret === undefined) body.ret = 1
-                    if (body.status != 200 || body.ret != 1) {
-                        throw new Error(body)
-                    }
-                    return body.data
+                if (body.status === undefined) body.status = 200
+                if (body.ret === undefined) body.ret = 1
+                if (body.status != 200 || body.ret != 1) {
+                    throw new Error(body)
                 }
-            })
+                return body.data
+            }
         })
         .then(json => {
             this.sid = json.sid
@@ -239,30 +193,77 @@ class LiveMe {
 
             return json
         })
-        .catch(err => {
-            const res = err.response
-            if (res && res.body) {
-                const json = JSON.parse(res.body)
-                if (json.data.captcha) {
-                    console.log('RECEIVED_CAPTCHA, Retrying...')
-                    return this.sendCaptchaRequest(json.data.captcha)
-                        .then(() => {
-                            return setTimeout(() => this.getAccessTokens(), 5000)
-                        })
-                        .catch(() => {
-                            return Promise.reject(err)
-                        })
-                }
-            }
-            return Promise.reject(err)
+    }
+
+    getCaptcha() {
+        return request({
+            url: `${URL.getCaptcha}?${Math.random() * 100}`,
+            headers: {
+                referer: 'https://www.liveme.com',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'
+            },
+            encoding: 'binary'
+        })
+        .then(res => {
+            return 'data:image/jfif;base64,' + new Buffer(res, 'binary').toString('base64')
         })
     }
 
-    sendCaptchaRequest(url) {
+    setCaptcha(value) {
+        this.captcha = value
+    }
+
+    getAccessTokensWeb() {
+        if ( ! this.email || ! this.password) {
+            return Promise.reject('You need to provide your Live.me email and password.')
+        }
+
         return request({
-            method: 'GET',
-            url,
-            simple: true
+            url: URL.accessToken,
+            qs: {
+                name: this.email,
+                password: Buffer.from(this.password).toString('base64'),
+                captcha: this.captcha,
+                sr: 1
+            },
+            headers: {
+                accept: 'application/json',
+                referer: 'https://www.liveme.com',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'
+            }
+        })
+        .then(res => {
+            const json = JSON.parse(res)
+
+            if (Number(json.status) !== 200) {
+                return Promise.reject(json)
+            }
+            
+            this.ssoToken = json.data.access_token
+
+            return request({
+                url: URL.channelLogin,
+                qs: {
+                    thirdchannel: this.thirdchannel,
+                    androidid: this.androidid,
+                    countrycode: '',
+                    reg_type: 108,
+                    access_token: this.ssoToken
+                }
+            })
+        })
+        .then(res => {
+            const json = JSON.parse(res)
+
+            if (Number(json.status) !== 200) {
+                return Promise.reject(json)
+            }
+
+            this.user = json.data.user
+            this.tuid = json.data.user.uid
+            this.token = json.data.token
+
+            return json
         })
     }
 
@@ -319,7 +320,8 @@ class LiveMe {
                 page_size,
                 tuid: this.tuid,
                 token: this.token,
-                sso_token: this.ssoToken
+                androidid: this.androidid,
+                thirdchannel: this.thirdchannel
             }
         })
         .then(json => {
