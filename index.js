@@ -263,6 +263,8 @@ class LiveMe {
             this.tuid = json.data.user.uid
             this.token = json.data.token
 
+            this.saveAuthToFile()
+
             return json
         })
     }
