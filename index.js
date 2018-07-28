@@ -93,7 +93,9 @@ class LiveMe {
 
     setAuthDetails(email, password, getTokens = true) {
         if ( ! email || ! password) {
-            return Promise.reject('You need to provide your Live.me email and password.')
+            return Promise.reject({
+                msg: 'You need to provide your Live.me email and password.'
+            })
         }
         this.email = email
         this.password = password
@@ -131,9 +133,20 @@ class LiveMe {
         }, params))
     }
 
+    handleError(err) {
+        if (err.response && err.response.body) err = JSON.parse(err.response.body)
+        if (typeof err === 'object') {
+            if (err.status) err.status = Number(err.status)
+            if (err.ret) err.ret = Number(ret)
+        }
+        return Promise.reject(err)
+    }
+
     getAccessTokens() {
         if ( ! this.email || ! this.password) {
-            return Promise.reject('You need to provide your Live.me email and password.')
+            return Promise.reject({
+                msg: 'You need to provide your Live.me email and password.'
+            })
         }
 
         this.removeAuthFile()
@@ -227,7 +240,9 @@ class LiveMe {
 
     getAccessTokensWeb() {
         if ( ! this.email || ! this.password) {
-            return Promise.reject('You need to provide your Live.me email and password.')
+            return Promise.reject({
+                msg: 'You need to provide your Live.me email and password.'
+            })
         }
 
         this.removeAuthFile()
@@ -281,11 +296,14 @@ class LiveMe {
 
             return json
         })
+        .catch(this.handleError)
     }
 
     getUserInfo(userid) {
         if ( ! userid) {
-            return Promise.reject('Invalid userid.')
+            return Promise.reject({
+                msg: 'Invalid userid.'
+            })
         }
 
         return this.fetch('userInfo', {
@@ -296,15 +314,20 @@ class LiveMe {
         .then(json => {
             return json.user
         })
+        .catch(this.handleError)
     }
 
     getVideoInfo(videoid) {
         if ( ! videoid) {
-            return Promise.reject('Invalid videoid.')
+            return Promise.reject({
+                msg: 'Invalid videoid.'
+            })
         }
 
         if ( ! this.user) {
-            return Promise.reject('Not authenticated with Live.me!')
+            return Promise.reject({
+                msg: 'Not authenticated with Live.me!'
+            })
         }
 
         return this.fetch('videoInfo', {
@@ -320,15 +343,20 @@ class LiveMe {
         .then(json => {
             return json.video_info
         })
+        .catch(this.handleError)
     }
 
     getUserReplays(userid, page_index = 1, page_size = 10) {
         if ( ! userid) {
-            return Promise.reject('Invalid userid.')
+            return Promise.reject({
+                msg: 'Invalid userid.'
+            })
         }
 
         if ( ! this.user) {
-            return Promise.reject('Not authenticated with Live.me!')
+            return Promise.reject({
+                msg: 'Not authenticated with Live.me!'
+            })
         }
 
         return this.fetch('replayVideos', {
@@ -345,6 +373,7 @@ class LiveMe {
         .then(json => {
             return json.video_info
         })
+        .catch(this.handleError)
     }
 
     getChatHistoryForVideo(url) {
@@ -357,7 +386,9 @@ class LiveMe {
 
     performSearch(query = '', page = 1, pagesize = 10, type, countryCode = '') {
         if ([1, 2].indexOf(type) === -1) {
-            return Promise.reject('Type must be 1 or 2.')
+            return Promise.reject({
+                msg: 'Type must be 1 or 2.'
+            })
         }
         return this.fetch('keywordSearch', {
             formData: {
@@ -371,6 +402,7 @@ class LiveMe {
         .then(json => {
             return json.data_info
         })
+        .catch(this.handleError)
     }
 
     getLive(page_index = 1, page_size = 10, countryCode = '') {
@@ -381,14 +413,17 @@ class LiveMe {
                 countryCode
             }
         })
-            .then(json => {
-                return json.video_info
-            })
+        .then(json => {
+            return json.video_info
+        })
+        .catch(this.handleError)
     }
 
     getFans(access_token, page_index = 1, page_size = 10) {
         if ( ! access_token) {
-            return Promise.reject('Invalid access_token (userid).')
+            return Promise.reject({
+                msg: 'Invalid access_token (userid).'
+            })
         }
 
         return this.fetch('fans', {
@@ -398,11 +433,14 @@ class LiveMe {
                 page_size
             }
         })
+        .catch(this.handleError)
     }
 
     getFollowing(access_token, page_index = 1, page_size = 10) {
         if ( ! access_token) {
-            return Promise.reject('Invalid access_token (userid).')
+            return Promise.reject({
+                msg: 'Invalid access_token (userid).'
+            })
         }
 
         return this.fetch('following', {
@@ -412,10 +450,12 @@ class LiveMe {
                 page_size
             }
         })
+        .catch(this.handleError)
     }
 
     getTrendingHashtags() {
         return this.fetch('trendingHashtags')
+            .catch(this.handleError)
     }
 
     getLiveGirls(page_size = 10, page = 1, countryCode = '') {
@@ -426,6 +466,7 @@ class LiveMe {
                 countryCode
             }
         })
+        .catch(this.handleError)
     }
 
     getLiveBoys(page_size = 10, page = 1, countryCode = '') {
@@ -436,6 +477,7 @@ class LiveMe {
                 countryCode
             }
         })
+        .catch(this.handleError)
     }
 }
 
