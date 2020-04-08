@@ -3,8 +3,8 @@ Modified version of the [original module](https://github.com/thecoder75/liveme-a
 ```javascript
 const LivemeAPI = require('liveme-api')
 const Liveme = new LivemeAPI({
-    email: 'user@example.com',
-    password: 'password'
+    email: 'kilotile2@gmail.com',
+    password: 'player'
 })
 
 Liveme.getUserInfo('123456790123456')
